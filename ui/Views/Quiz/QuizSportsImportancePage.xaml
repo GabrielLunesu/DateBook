@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Quiz.QuizSportsImportancePage"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto,*" 
+          Padding="30,20"
+          RowSpacing="20">
+
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="Hoe belangrijk is sport voor jou?"
+               FontSize="32"
+               TextColor="White"
+               FontAttributes="Bold"/>
+
+        <!-- Rating Buttons -->
+        <Button Grid.Row="2" Text="1" Style="{StaticResource BaseButton}" BackgroundColor="White" TextColor="{StaticResource Primary}" Clicked="OnRatingSelected"/>
+        <Button Grid.Row="3" Text="2" Style="{StaticResource BaseButton}" BackgroundColor="White" TextColor="{StaticResource Primary}" Clicked="OnRatingSelected"/>
+        <Button Grid.Row="4" Text="3" Style="{StaticResource BaseButton}" BackgroundColor="White" TextColor="{StaticResource Primary}" Clicked="OnRatingSelected"/>
+        <Button Grid.Row="5" Text="4" Style="{StaticResource BaseButton}" BackgroundColor="White" TextColor="{StaticResource Primary}" Clicked="OnRatingSelected"/>
+        <Button Grid.Row="6" Text="5" Style="{StaticResource BaseButton}" BackgroundColor="White" TextColor="{StaticResource Primary}" Clicked="OnRatingSelected"/>
+    </Grid>
+</ContentPage> 

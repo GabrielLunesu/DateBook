@@ -14,7 +14,6 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginSubmitClicked(object sender, EventArgs e)
     {
-        // Handle login submission
-        // await Navigation.PushAsync(new HomePage());
+        await Navigation.PushAsync(new QuizStartPage());
     }
 } 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Quiz.QuizLookingForPage"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,*" 
+          Padding="30,20"
+          RowSpacing="20">
+
+        <!-- Title -->
+        <Label Grid.Row="0"
+               Text="Wat zoek je?"
+               FontSize="32"
+               TextColor="White"
+               FontAttributes="Bold"/>
+
+        <!-- Options -->
+        <Button Grid.Row="2"
+                Text="CASUAL"
+                Style="{StaticResource BaseButton}"
+                BackgroundColor="White"
+                TextColor="{StaticResource Primary}"
+                Clicked="OnOptionSelected"/>
+
+        <Button Grid.Row="3"
+                Text="VRIENDSCHAP"
+                Style="{StaticResource BaseButton}"
+                BackgroundColor="White"
+                TextColor="{StaticResource Primary}"
+                Clicked="OnOptionSelected"/>
+
+        <Button Grid.Row="4"
+                Text="RELATIE"
+                Style="{StaticResource BaseButton}"
+                BackgroundColor="White"
+                TextColor="{StaticResource Primary}"
+                Clicked="OnOptionSelected"/>
+    </Grid>
+</ContentPage> 

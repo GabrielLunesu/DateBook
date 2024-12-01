@@ -24,6 +24,11 @@ public static class MauiProgram
 
 		builder.Services.AddTransient<Views.LoginPage>();
 		builder.Services.AddTransient<Views.RegisterPage>();
+		builder.Services.AddTransient<Views.Quiz.QuizStartPage>();
+		builder.Services.AddTransient<Views.Quiz.QuizAgePreferencePage>();
+		builder.Services.AddTransient<Views.Quiz.QuizLookingForPage>();
+		builder.Services.AddTransient<Views.Quiz.QuizSportsImportancePage>();
+		builder.Services.AddTransient<Views.Quiz.QuizWeekendPreferencePage>();
 
 		return builder.Build();
 	}

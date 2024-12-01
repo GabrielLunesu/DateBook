@@ -14,7 +14,6 @@ public partial class RegisterPage : ContentPage
 
     private async void OnRegisterSubmitClicked(object sender, EventArgs e)
     {
-        // Handle registration submission
-        // await Navigation.PushAsync(new HomePage());
+        await Navigation.PushAsync(new QuizStartPage());
     }
 } 
