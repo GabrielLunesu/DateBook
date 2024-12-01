@@ -2,7 +2,7 @@ using System;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 
-namespace dating_app;
+namespace ui;
 
 class Program : MauiApplication
 {

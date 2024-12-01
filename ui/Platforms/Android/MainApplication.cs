@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace dating_app;
+namespace ui;
 
 [Application]
 public class MainApplication : MauiApplication

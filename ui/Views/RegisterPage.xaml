@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.RegisterPage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" 
+          Padding="30,0"
+          RowSpacing="20">
+        
+        <!-- Back Button -->
+        <Button Grid.Row="0"
+                Text="←"
+                FontSize="24"
+                HeightRequest="50"
+                WidthRequest="50"
+                Padding="0"
+                HorizontalOptions="Start"
+                BackgroundColor="Transparent"
+                TextColor="Black"
+                Clicked="OnBackClicked"
+                Margin="0,20,0,0"/>
+
+        <!-- Title -->
+        <Label Grid.Row="1"
+               Text="REGISTREREN"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Start"
+               Margin="0,20,0,40"/>
+
+        <!-- Registration Form -->
+        <VerticalStackLayout Grid.Row="2" Spacing="30">
+            <Entry Placeholder="Full Name"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"/>
+            
+            <Picker Title="Geslacht"
+                    TitleColor="{StaticResource TextSecondary}"
+                    TextColor="{StaticResource TextPrimary}">
+                <Picker.Items>
+                    <x:String>Man</x:String>
+                    <x:String>Vrouw</x:String>
+                    <x:String>Anders</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <DatePicker Format="dd/MM/yyyy"
+                       TextColor="{StaticResource TextPrimary}"/>
+            
+            <Entry Placeholder="Telefoon"
+                   Keyboard="Telephone"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"/>
+            
+            <Entry Placeholder="Wachtwoord"
+                   IsPassword="True"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"/>
+        </VerticalStackLayout>
+
+        <!-- Register Button -->
+        <Button Grid.Row="3"
+                Text="REGISTREREN"
+                Style="{StaticResource PrimaryButton}"
+                Margin="0,0,0,30"
+                Clicked="OnRegisterSubmitClicked"/>
+    </Grid>
+
+</ContentPage> 

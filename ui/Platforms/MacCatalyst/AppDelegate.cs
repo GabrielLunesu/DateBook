@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace dating_app;
+namespace ui;
 
 [Register("AppDelegate")]
 public class AppDelegate : MauiUIApplicationDelegate

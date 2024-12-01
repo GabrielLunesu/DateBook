@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using DotNet.Meteor.HotReload.Plugin;
 
-namespace dating_app;
+
+namespace ui;
 
 public static class MauiProgram
 {
@@ -13,11 +15,15 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+			})
 
 #if DEBUG
+		.EnableHotReload();
 		builder.Logging.AddDebug();
 #endif
+
+		builder.Services.AddTransient<Views.LoginPage>();
+		builder.Services.AddTransient<Views.RegisterPage>();
 
 		return builder.Build();
 	}

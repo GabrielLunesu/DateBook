@@ -1,4 +1,4 @@
-﻿namespace dating_app;
+﻿namespace ui;
 
 public partial class AppShell : Shell
 {

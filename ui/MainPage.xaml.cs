@@ -1,24 +1,25 @@
-﻿namespace dating_app;
+﻿namespace ui;
+using System.Windows.Input;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+	public ICommand RegisterCommand { get; }
 
 	public MainPage()
 	{
 		InitializeComponent();
+		RegisterCommand = new Command(OnRegisterClicked);
+		BindingContext = this;
 	}
 
-	private void OnCounterClicked(object sender, EventArgs e)
+	private async void OnRegisterClicked()
 	{
-		count++;
+		await Navigation.PushAsync(new Views.RegisterPage());
+	}
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
-
-		SemanticScreenReader.Announce(CounterBtn.Text);
+	private async void OnLoginClicked(object sender, EventArgs e)
+	{
+		await Navigation.PushAsync(new Views.LoginPage());
 	}
 }
 

@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace dating_app;
+namespace ui;
 
 public class Program
 {
