@@ -11,10 +11,12 @@
                 BackgroundColor="Transparent"/>
         <Button Grid.Column="1" 
                 Text="❤️"
-                BackgroundColor="Transparent"/>
+                BackgroundColor="Transparent"
+                Clicked="OnLikesClicked"/>
         <Button Grid.Column="2" 
                 Text="💬"
-                BackgroundColor="Transparent"/>
+                BackgroundColor="Transparent"
+                Clicked="OnChatClicked"/>
         <Button Grid.Column="3" 
                 Text="👤"
                 BackgroundColor="Transparent"

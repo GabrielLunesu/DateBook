@@ -9,6 +9,8 @@
     xmlns:quiz="clr-namespace:ui.Views.Quiz"
     xmlns:components="clr-namespace:ui.Views.Home.Components"
     xmlns:profile="clr-namespace:ui.Views.Profile"
+    xmlns:likes="clr-namespace:ui.Views.Likes"
+    xmlns:chat="clr-namespace:ui.Views.Chat"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="True">
 
@@ -55,5 +57,13 @@
     <ShellContent
         ContentTemplate="{DataTemplate profile:ProfilePage}"
         Route="ProfilePage" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate likes:LikesPage}"
+        Route="LikesPage" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate chat:ChatPage}"
+        Route="ChatPage" />
 
 </Shell>
