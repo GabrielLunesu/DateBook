@@ -8,6 +8,7 @@
     xmlns:home="clr-namespace:ui.Views.Home"
     xmlns:quiz="clr-namespace:ui.Views.Quiz"
     xmlns:components="clr-namespace:ui.Views.Home.Components"
+    xmlns:profile="clr-namespace:ui.Views.Profile"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="True">
 
@@ -50,5 +51,9 @@
     <ShellContent
         ContentTemplate="{DataTemplate components:FilterView}"
         Route="FilterView" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate profile:ProfilePage}"
+        Route="ProfilePage" />
 
 </Shell>
