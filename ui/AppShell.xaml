@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ui"
     xmlns:views="clr-namespace:ui.Views"
+    xmlns:home="clr-namespace:ui.Views.Home"
     xmlns:quiz="clr-namespace:ui.Views.Quiz"
+    xmlns:components="clr-namespace:ui.Views.Home.Components"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="True">
 
@@ -40,5 +42,13 @@
     <ShellContent
         ContentTemplate="{DataTemplate quiz:QuizWeekendPreferencePage}"
         Route="QuizWeekendPreferencePage" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate home:HomePage}"
+        Route="HomePage" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate components:FilterView}"
+        Route="FilterView" />
 
 </Shell>

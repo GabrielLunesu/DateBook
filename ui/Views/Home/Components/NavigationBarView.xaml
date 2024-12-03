@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Home.Components.NavigationBarView">
+    <Grid ColumnDefinitions="*,*,*,*"
+          BackgroundColor="White"
+          Padding="0,10"
+          HeightRequest="60">
+        <Button Grid.Column="0" 
+                Text="🏠"
+                BackgroundColor="Transparent"/>
+        <Button Grid.Column="1" 
+                Text="❤️"
+                BackgroundColor="Transparent"/>
+        <Button Grid.Column="2" 
+                Text="💬"
+                BackgroundColor="Transparent"/>
+        <Button Grid.Column="3" 
+                Text="👤"
+                BackgroundColor="Transparent"/>
+    </Grid>
+</ContentView> 
