@@ -8,23 +8,15 @@
         <!-- Header -->
         <Grid Grid.Row="0" 
               ColumnDefinitions="Auto,*,Auto"
-              Padding="20,10">
-            <Button Grid.Column="0"
-                    Text="←"
-                    FontSize="24"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Padding="0"
-                    HorizontalOptions="Start"
-                    BackgroundColor="Transparent"
-                    TextColor="White"
-                    Clicked="OnBackClicked"/>
+              Padding="30,10">
+           
             <Label Grid.Column="1"
                    Text="Profiel"
-                   FontSize="25"
+                   FontSize="35"
                    TextColor="White"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center"
+                   VerticalOptions="Top"/>
         </Grid>
 
         <!-- Profile Content -->
