@@ -1,5 +1,7 @@
 namespace ui.Views;
 
+using ui.Views.Quiz;
+
 public partial class RegisterPage : ContentPage
 {
     public RegisterPage()

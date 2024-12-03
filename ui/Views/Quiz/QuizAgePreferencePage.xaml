@@ -4,9 +4,10 @@
              x:Class="ui.Views.Quiz.QuizAgePreferencePage"
              BackgroundColor="{StaticResource Primary}">
 
-    <Grid RowDefinitions="Auto,*,Auto,Auto,*,Auto" 
+    <Grid RowDefinitions="Auto,*,Auto" 
           Padding="30,20"
           RowSpacing="20">
+
 
         <!-- Title -->
         <Label Grid.Row="0"
@@ -16,33 +17,31 @@
                FontAttributes="Bold"/>
 
         <!-- Age Range Selection -->
-       <VerticalStackLayout Padding="20">
-    <!-- Age Range Display -->
-    <Label Text="{Binding Source={x:Reference MinSlider}, 
-           StringFormat='Age Range: {0:F0} - {1:F0}', 
-           Path=Value, 
-           Target={x:Reference MaxSlider}}"
-           HorizontalOptions="Center"
-           FontSize="16"
-           Margin="0,0,0,10"/>
+        <Frame Grid.Row="1" 
+               BackgroundColor="White"
+               CornerRadius="20"
+               Padding="20"
+               Margin="0,20">
+            
+            <VerticalStackLayout Spacing="20">
+                <Entry Placeholder="Ouder dan (18-99)"
+                       x:Name="MinAgeEntry"
+                       Keyboard="Numeric"
+                       MaxLength="2"
+                       TextColor="{StaticResource TextPrimary}"
+                       PlaceholderColor="{StaticResource TextSecondary}"/>
 
-    <!-- Min Age Slider -->
-    <Slider x:Name="MinSlider"
-            Maximum="60"
-            Minimum="18"
-            Value="20"
-            ValueChanged="OnMinSliderValueChanged"/>
-
-    <!-- Max Age Slider -->
-    <Slider x:Name="MaxSlider"
-            Maximum="60"
-            Minimum="18"
-            Value="40"
-            ValueChanged="OnMaxSliderValueChanged"/>
-</VerticalStackLayout>
+                <Entry Placeholder="Jonger dan (18-99)"
+                       x:Name="MaxAgeEntry"
+                       Keyboard="Numeric"
+                       MaxLength="2"
+                       TextColor="{StaticResource TextPrimary}"
+                       PlaceholderColor="{StaticResource TextSecondary}"/>
+            </VerticalStackLayout>
+        </Frame>
 
         <!-- Continue Button -->
-        <Button Grid.Row="5"
+        <Button Grid.Row="2"
                 Text="DOORGAAN"
                 Style="{StaticResource BaseButton}"
                 BackgroundColor="White"

@@ -11,9 +11,8 @@ public partial class QuizWeekendPreferencePage : ContentPage
     {
         if (sender is Button button)
         {
-            // Store selection if needed
-            // Navigate to the main app after completing quiz
-            // await Navigation.PushAsync(new HomePage());
+            // For now, just go back to the main page after completing the quiz
+            await Shell.Current.GoToAsync("//MainPage");
         }
     }
-} 
+}

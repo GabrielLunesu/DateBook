@@ -21,5 +21,10 @@ public partial class MainPage : ContentPage
 	{
 		await Navigation.PushAsync(new Views.LoginPage());
 	}
+
+	private async void OnBackClicked(object sender, EventArgs e)
+	{
+		await Navigation.PopAsync();
+	}
 }
 

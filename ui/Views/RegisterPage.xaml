@@ -7,20 +7,7 @@
     <Grid RowDefinitions="Auto,Auto,*,Auto" 
           Padding="30,0"
           RowSpacing="20">
-        
-        <!-- Back Button -->
-        <Button Grid.Row="0"
-                Text="←"
-                FontSize="24"
-                HeightRequest="50"
-                WidthRequest="50"
-                Padding="0"
-                HorizontalOptions="Start"
-                BackgroundColor="Transparent"
-                TextColor="Black"
-                Clicked="OnBackClicked"
-                Margin="0,20,0,0"/>
-
+     
         <!-- Title -->
         <Label Grid.Row="1"
                Text="REGISTREREN"
