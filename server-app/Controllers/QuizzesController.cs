@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,14 +24,25 @@ namespace dating_app_server.Controllers
 
         // GET: api/Quizzes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Quiz>>> GetQuizzes()
+        public async Task<ActionResult<IEnumerable<QuizDTO>>> GetQuizzes()
         {
-            return await _context.Quizzes.ToListAsync();
+            return await _context.Quizzes
+                .Select(quiz => new QuizDTO
+                {
+                    QuizId = quiz.QuizId,
+                    UserId = quiz.UserId,
+                    AgePreference = quiz.AgePreference,
+                    RelationshipType = quiz.RelationshipType,
+                    SportImportance = quiz.SportImportance,
+                    SocialLevel = quiz.SocialLevel,
+                    WeekendActivity = quiz.WeekendActivity,
+                    CompletedAt = quiz.CompletedAt
+                }).ToListAsync();
         }
 
         // GET: api/Quizzes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Quiz>> GetQuiz(int id)
+        public async Task<ActionResult<QuizDTO>> GetQuiz(int id)
         {
             var quiz = await _context.Quizzes.FindAsync(id);
 
@@ -39,20 +51,36 @@ namespace dating_app_server.Controllers
                 return NotFound();
             }
 
-            return quiz;
+            return new QuizDTO
+            {
+                QuizId = quiz.QuizId,
+                UserId = quiz.UserId,
+                AgePreference = quiz.AgePreference,
+                RelationshipType = quiz.RelationshipType,
+                SportImportance = quiz.SportImportance,
+                SocialLevel = quiz.SocialLevel,
+                WeekendActivity = quiz.WeekendActivity,
+                CompletedAt = quiz.CompletedAt
+            };
         }
 
         // PUT: api/Quizzes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutQuiz(int id, Quiz quiz)
+        public async Task<IActionResult> PutQuiz(int id, UpdateQuizDTO updateQuizDTO)
         {
-            if (id != quiz.QuizId)
+            var quiz = await _context.Quizzes.FindAsync(id);
+            
+            if (quiz == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(quiz).State = EntityState.Modified;
+            quiz.AgePreference = updateQuizDTO.AgePreference ?? quiz.AgePreference;
+            quiz.RelationshipType = updateQuizDTO.RelationshipType ?? quiz.RelationshipType;
+            quiz.SportImportance = updateQuizDTO.SportImportance ?? quiz.SportImportance;
+            quiz.SocialLevel = updateQuizDTO.SocialLevel ?? quiz.SocialLevel;
+            quiz.WeekendActivity = updateQuizDTO.WeekendActivity ?? quiz.WeekendActivity;
+            quiz.CompletedAt = DateTime.UtcNow;
 
             try
             {
@@ -74,14 +102,40 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Quizzes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Quiz>> PostQuiz(Quiz quiz)
+        public async Task<ActionResult<QuizDTO>> PostQuiz(CreateQuizDTO createQuizDTO)
         {
+            var quiz = new Quiz
+            {
+                UserId = createQuizDTO.UserId,
+                AgePreference = createQuizDTO.AgePreference,
+                RelationshipType = createQuizDTO.RelationshipType,
+                SportImportance = createQuizDTO.SportImportance,
+                SocialLevel = createQuizDTO.SocialLevel,
+                WeekendActivity = createQuizDTO.WeekendActivity,
+                CompletedAt = DateTime.UtcNow
+            };
+
             _context.Quizzes.Add(quiz);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetQuiz", new { id = quiz.QuizId }, quiz);
+            var quizDTO = new QuizDTO
+            {
+                QuizId = quiz.QuizId,
+                UserId = quiz.UserId,
+                AgePreference = quiz.AgePreference,
+                RelationshipType = quiz.RelationshipType,
+                SportImportance = quiz.SportImportance,
+                SocialLevel = quiz.SocialLevel,
+                WeekendActivity = quiz.WeekendActivity,
+                CompletedAt = quiz.CompletedAt
+            };
+
+            return CreatedAtAction(
+                nameof(GetQuiz), 
+                new { id = quiz.QuizId }, 
+                quizDTO
+            );
         }
 
         // DELETE: api/Quizzes/5
