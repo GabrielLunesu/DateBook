@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,36 +24,62 @@ namespace dating_app_server.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReviews()
+        public async Task<ActionResult<IEnumerable<ReviewDTO>>> GetReviews()
         {
-            return await _context.Reviews.ToListAsync();
+            return await _context.Reviews
+                .Include(r => r.ReviewedUser)
+                .Select(review => new ReviewDTO
+                {
+                    ReviewId = review.ReviewId,
+                    UserId = review.UserId,
+                    ReviewedUserId = review.ReviewedUserId,
+                    Rating = review.Rating,
+                    Comment = review.Comment,
+                    CreatedAt = review.CreatedAt,
+                    ReviewedUserName = review.ReviewedUser.Name,
+                    ReviewedUserPhoto = review.ReviewedUser.Photos.FirstOrDefault()
+                }).ToListAsync();
         }
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        public async Task<ActionResult<ReviewDTO>> GetReview(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var review = await _context.Reviews
+                .Include(r => r.ReviewedUser)
+                .FirstOrDefaultAsync(r => r.ReviewId == id);
 
             if (review == null)
             {
                 return NotFound();
             }
 
-            return review;
+            return new ReviewDTO
+            {
+                ReviewId = review.ReviewId,
+                UserId = review.UserId,
+                ReviewedUserId = review.ReviewedUserId,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                CreatedAt = review.CreatedAt,
+                ReviewedUserName = review.ReviewedUser.Name,
+                ReviewedUserPhoto = review.ReviewedUser.Photos.FirstOrDefault()
+            };
         }
 
         // PUT: api/Reviews/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review review)
+        public async Task<IActionResult> PutReview(int id, UpdateReviewDTO updateReviewDTO)
         {
-            if (id != review.ReviewId)
+            var review = await _context.Reviews.FindAsync(id);
+            
+            if (review == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(review).State = EntityState.Modified;
+            review.Rating = updateReviewDTO.Rating;
+            review.Comment = updateReviewDTO.Comment;
 
             try
             {
@@ -74,14 +101,43 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Reviews
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Review>> PostReview(Review review)
+        public async Task<ActionResult<ReviewDTO>> PostReview(CreateReviewDTO createReviewDTO)
         {
+            var review = new Review
+            {
+                UserId = createReviewDTO.UserId,
+                ReviewedUserId = createReviewDTO.ReviewedUserId,
+                Rating = createReviewDTO.Rating,
+                Comment = createReviewDTO.Comment,
+                CreatedAt = DateTime.UtcNow
+            };
+
             _context.Reviews.Add(review);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReview", new { id = review.ReviewId }, review);
+            // Load the reviewed user for the response
+            await _context.Entry(review)
+                .Reference(r => r.ReviewedUser)
+                .LoadAsync();
+
+            var reviewDTO = new ReviewDTO
+            {
+                ReviewId = review.ReviewId,
+                UserId = review.UserId,
+                ReviewedUserId = review.ReviewedUserId,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                CreatedAt = review.CreatedAt,
+                ReviewedUserName = review.ReviewedUser.Name,
+                ReviewedUserPhoto = review.ReviewedUser.Photos.FirstOrDefault()
+            };
+
+            return CreatedAtAction(
+                nameof(GetReview), 
+                new { id = review.ReviewId }, 
+                reviewDTO
+            );
         }
 
         // DELETE: api/Reviews/5
