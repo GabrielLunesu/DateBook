@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,36 +24,63 @@ namespace dating_app_server.Controllers
 
         // GET: api/Dates
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Date>>> GetDates()
+        public async Task<ActionResult<IEnumerable<DateDTO>>> GetDates()
         {
-            return await _context.Dates.ToListAsync();
+            return await _context.Dates
+                .Include(d => d.DateUser)
+                .Select(date => new DateDTO
+                {
+                    DateId = date.DateId,
+                    UserId = date.UserId,
+                    DateUserId = date.DateUserId,
+                    Location = date.Location,
+                    DateTime = date.DateTime,
+                    Status = date.Status,
+                    DateUserName = date.DateUser.Name,
+                    DateUserPhoto = date.DateUser.Photos.FirstOrDefault()
+                }).ToListAsync();
         }
 
         // GET: api/Dates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Date>> GetDate(int id)
+        public async Task<ActionResult<DateDTO>> GetDate(int id)
         {
-            var date = await _context.Dates.FindAsync(id);
+            var date = await _context.Dates
+                .Include(d => d.DateUser)
+                .FirstOrDefaultAsync(d => d.DateId == id);
 
             if (date == null)
             {
                 return NotFound();
             }
 
-            return date;
+            return new DateDTO
+            {
+                DateId = date.DateId,
+                UserId = date.UserId,
+                DateUserId = date.DateUserId,
+                Location = date.Location,
+                DateTime = date.DateTime,
+                Status = date.Status,
+                DateUserName = date.DateUser.Name,
+                DateUserPhoto = date.DateUser.Photos.FirstOrDefault()
+            };
         }
 
         // PUT: api/Dates/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDate(int id, Date date)
+        public async Task<IActionResult> PutDate(int id, UpdateDateDTO updateDateDTO)
         {
-            if (id != date.DateId)
+            var date = await _context.Dates.FindAsync(id);
+            
+            if (date == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(date).State = EntityState.Modified;
+            date.Location = updateDateDTO.Location ?? date.Location;
+            date.DateTime = updateDateDTO.DateTime;
+            date.Status = updateDateDTO.Status ?? date.Status;
 
             try
             {
@@ -74,14 +102,43 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Dates
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Date>> PostDate(Date date)
+        public async Task<ActionResult<DateDTO>> PostDate(CreateDateDTO createDateDTO)
         {
+            var date = new Date
+            {
+                UserId = createDateDTO.UserId,
+                DateUserId = createDateDTO.DateUserId,
+                Location = createDateDTO.Location,
+                DateTime = createDateDTO.DateTime,
+                Status = "Pending" // Default status
+            };
+
             _context.Dates.Add(date);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDate", new { id = date.DateId }, date);
+            // Load the date user for the response
+            await _context.Entry(date)
+                .Reference(d => d.DateUser)
+                .LoadAsync();
+
+            var dateDTO = new DateDTO
+            {
+                DateId = date.DateId,
+                UserId = date.UserId,
+                DateUserId = date.DateUserId,
+                Location = date.Location,
+                DateTime = date.DateTime,
+                Status = date.Status,
+                DateUserName = date.DateUser.Name,
+                DateUserPhoto = date.DateUser.Photos.FirstOrDefault()
+            };
+
+            return CreatedAtAction(
+                nameof(GetDate), 
+                new { id = date.DateId }, 
+                dateDTO
+            );
         }
 
         // DELETE: api/Dates/5
