@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,14 +24,22 @@ namespace dating_app_server.Controllers
 
         // GET: api/Messages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+        public async Task<ActionResult<IEnumerable<MessageDTO>>> GetMessages()
         {
-            return await _context.Messages.ToListAsync();
+            return await _context.Messages
+                .Select(message => new MessageDTO
+                {
+                    MessageId = message.MessageId,
+                    ChatId = message.ChatId,
+                    Content = message.Content,
+                    Timestamp = message.Timestamp,
+                    IsRead = message.IsRead
+                }).ToListAsync();
         }
 
         // GET: api/Messages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Message>> GetMessage(int id)
+        public async Task<ActionResult<MessageDTO>> GetMessage(int id)
         {
             var message = await _context.Messages.FindAsync(id);
 
@@ -39,20 +48,28 @@ namespace dating_app_server.Controllers
                 return NotFound();
             }
 
-            return message;
+            return new MessageDTO
+            {
+                MessageId = message.MessageId,
+                ChatId = message.ChatId,
+                Content = message.Content,
+                Timestamp = message.Timestamp,
+                IsRead = message.IsRead
+            };
         }
 
         // PUT: api/Messages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMessage(int id, Message message)
+        public async Task<IActionResult> PutMessage(int id, UpdateMessageDTO updateMessageDTO)
         {
-            if (id != message.MessageId)
+            var message = await _context.Messages.FindAsync(id);
+            
+            if (message == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(message).State = EntityState.Modified;
+            message.IsRead = updateMessageDTO.IsRead;
 
             try
             {
@@ -74,14 +91,34 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Messages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
+        public async Task<ActionResult<MessageDTO>> PostMessage(CreateMessageDTO createMessageDTO)
         {
+            var message = new Message
+            {
+                ChatId = createMessageDTO.ChatId,
+                Content = createMessageDTO.Content,
+                Timestamp = DateTime.UtcNow,
+                IsRead = false // Default value
+            };
+
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMessage", new { id = message.MessageId }, message);
+            var messageDTO = new MessageDTO
+            {
+                MessageId = message.MessageId,
+                ChatId = message.ChatId,
+                Content = message.Content,
+                Timestamp = message.Timestamp,
+                IsRead = message.IsRead
+            };
+
+            return CreatedAtAction(
+                nameof(GetMessage), 
+                new { id = message.MessageId }, 
+                messageDTO
+            );
         }
 
         // DELETE: api/Messages/5
