@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,36 +24,61 @@ namespace dating_app_server.Controllers
 
         // GET: api/Chats
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Chat>>> GetChats()
+        public async Task<ActionResult<IEnumerable<ChatDTO>>> GetChats()
         {
-            return await _context.Chats.ToListAsync();
+            return await _context.Chats.Select(chat => new ChatDTO
+            {
+                ChatId = chat.ChatId,
+                UserId = chat.UserId,
+                ChatUserId = chat.ChatUserId,
+                Status = chat.Status,
+                LastMessage = chat.LastMessage
+            }).ToListAsync();
         }
 
         // GET: api/Chats/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Chat>> GetChat(int id)
+        public async Task<ActionResult<ChatDetailDTO>> GetChat(int id)
         {
-            var chat = await _context.Chats.FindAsync(id);
+            var chat = await _context.Chats
+                .Include(c => c.Messages)
+                .FirstOrDefaultAsync(c => c.ChatId == id);
 
             if (chat == null)
             {
                 return NotFound();
             }
 
-            return chat;
+            return new ChatDetailDTO
+            {
+                ChatId = chat.ChatId,
+                UserId = chat.UserId,
+                ChatUserId = chat.ChatUserId,
+                Status = chat.Status,
+                LastMessage = chat.LastMessage,
+                Messages = chat.Messages.Select(m => new MessageDTO
+                {
+                    MessageId = m.MessageId,
+                    Content = m.Content,
+                    Timestamp = m.Timestamp,
+                    IsRead = m.IsRead
+                }).ToList()
+            };
         }
 
         // PUT: api/Chats/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutChat(int id, Chat chat)
+        public async Task<IActionResult> PutChat(int id, UpdateChatDTO updateChatDTO)
         {
-            if (id != chat.ChatId)
+            var chat = await _context.Chats.FindAsync(id);
+            
+            if (chat == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(chat).State = EntityState.Modified;
+            chat.Status = updateChatDTO.Status;
+            chat.LastMessage = updateChatDTO.LastMessage;
 
             try
             {
@@ -74,14 +100,34 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Chats
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Chat>> PostChat(Chat chat)
+        public async Task<ActionResult<ChatDTO>> PostChat(CreateChatDTO createChatDTO)
         {
+            var chat = new Chat
+            {
+                UserId = createChatDTO.UserId,
+                ChatUserId = createChatDTO.ChatUserId,
+                Status = createChatDTO.Status,
+                LastMessage = DateTime.UtcNow  // Set initial timestamp
+            };
+
             _context.Chats.Add(chat);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetChat", new { id = chat.ChatId }, chat);
+            var chatDTO = new ChatDTO
+            {
+                ChatId = chat.ChatId,
+                UserId = chat.UserId,
+                ChatUserId = chat.ChatUserId,
+                Status = chat.Status,
+                LastMessage = chat.LastMessage
+            };
+
+            return CreatedAtAction(
+                nameof(GetChat), 
+                new { id = chat.ChatId }, 
+                chatDTO
+            );
         }
 
         // DELETE: api/Chats/5
