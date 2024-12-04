@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,36 +24,86 @@ namespace dating_app_server.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users
+                .Select(user => new UserDTO
+                {
+                    UserId = user.UserId,
+                    Email = user.Email,
+                    Name = user.Name,
+                    BirthDate = user.BirthDate,
+                    Photos = user.Photos,
+                    Location = user.Location,
+                    IsActive = user.IsActive,
+                    CreatedAt = user.CreatedAt
+                }).ToListAsync();
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDetailDTO>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .Include(u => u.UserType)
+                .Include(u => u.Profile)
+                .Include(u => u.Quiz)
+                .FirstOrDefaultAsync(u => u.UserId == id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return new UserDetailDTO
+            {
+                UserId = user.UserId,
+                Email = user.Email,
+                Name = user.Name,
+                BirthDate = user.BirthDate,
+                Photos = user.Photos,
+                Location = user.Location,
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt,
+                UserTypeName = user.UserType?.Name,
+                Profile = user.Profile == null ? null : new ProfileDTO
+                {
+                    ProfileId = user.Profile.ProfileId,
+                    Bio = user.Profile.Bio,
+                    Gender = user.Profile.Gender,
+                    Preferences = user.Profile.Preferences,
+                    MinAge = user.Profile.MinAge,
+                    MaxAge = user.Profile.MaxAge,
+                    LastActive = user.Profile.LastActive
+                },
+                Quiz = user.Quiz == null ? null : new QuizDTO
+                {
+                    QuizId = user.Quiz.QuizId,
+                    AgePreference = user.Quiz.AgePreference,
+                    RelationshipType = user.Quiz.RelationshipType,
+                    SportImportance = user.Quiz.SportImportance,
+                    SocialLevel = user.Quiz.SocialLevel,
+                    WeekendActivity = user.Quiz.WeekendActivity,
+                    CompletedAt = user.Quiz.CompletedAt
+                }
+            };
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(int id, UpdateUserDTO updateUserDTO)
         {
-            if (id != user.UserId)
+            var user = await _context.Users.FindAsync(id);
+            
+            if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            user.Name = updateUserDTO.Name ?? user.Name;
+            user.Photos = updateUserDTO.Photos ?? user.Photos;
+            user.Location = updateUserDTO.Location ?? user.Location;
+            user.IsActive = updateUserDTO.IsActive;
 
             try
             {
@@ -74,14 +125,42 @@ namespace dating_app_server.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<UserDTO>> PostUser(CreateUserDTO createUserDTO)
         {
+            var user = new User
+            {
+                Email = createUserDTO.Email,
+                Password = createUserDTO.Password, // In real app, hash this!
+                Name = createUserDTO.Name,
+                BirthDate = createUserDTO.BirthDate,
+                Location = createUserDTO.Location,
+                UserTypeId = createUserDTO.UserTypeId,
+                IsActive = true,
+                CreatedAt = DateTime.UtcNow,
+                Photos = new string[] { }
+            };
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
+            var userDTO = new UserDTO
+            {
+                UserId = user.UserId,
+                Email = user.Email,
+                Name = user.Name,
+                BirthDate = user.BirthDate,
+                Photos = user.Photos,
+                Location = user.Location,
+                IsActive = user.IsActive,
+                CreatedAt = user.CreatedAt
+            };
+
+            return CreatedAtAction(
+                nameof(GetUser), 
+                new { id = user.UserId }, 
+                userDTO
+            );
         }
 
         // DELETE: api/Users/5

@@ -4,6 +4,7 @@ using DatingApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace dating_app_server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241204131848_EnumUserType")]
+    partial class EnumUserType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -322,23 +325,6 @@ namespace dating_app_server.Migrations
                     b.HasKey("TypeId");
 
                     b.ToTable("UserTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            TypeId = 1,
-                            Name = "User"
-                        },
-                        new
-                        {
-                            TypeId = 2,
-                            Name = "Moderator"
-                        },
-                        new
-                        {
-                            TypeId = 3,
-                            Name = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("DatingApp.Models.Chat", b =>

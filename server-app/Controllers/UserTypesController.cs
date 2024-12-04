@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
+using DatingApp.DTOs;
 
 namespace dating_app_server.Controllers
 {
@@ -23,14 +24,20 @@ namespace dating_app_server.Controllers
 
         // GET: api/UserTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserType>>> GetUserTypes()
+        public async Task<ActionResult<IEnumerable<UserTypeDTO>>> GetUserTypes()
         {
-            return await _context.UserTypes.ToListAsync();
+            return await _context.UserTypes
+                .Select(ut => new UserTypeDTO
+                {
+                    TypeId = ut.TypeId,
+                    Name = ut.Name
+                })
+                .ToListAsync();
         }
 
         // GET: api/UserTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserType>> GetUserType(int id)
+        public async Task<ActionResult<UserTypeDTO>> GetUserType(int id)
         {
             var userType = await _context.UserTypes.FindAsync(id);
 
@@ -39,70 +46,11 @@ namespace dating_app_server.Controllers
                 return NotFound();
             }
 
-            return userType;
-        }
-
-        // PUT: api/UserTypes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserType(int id, UserType userType)
-        {
-            if (id != userType.TypeId)
+            return new UserTypeDTO
             {
-                return BadRequest();
-            }
-
-            _context.Entry(userType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserTypeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/UserTypes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<UserType>> PostUserType(UserType userType)
-        {
-            _context.UserTypes.Add(userType);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUserType", new { id = userType.TypeId }, userType);
-        }
-
-        // DELETE: api/UserTypes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserType(int id)
-        {
-            var userType = await _context.UserTypes.FindAsync(id);
-            if (userType == null)
-            {
-                return NotFound();
-            }
-
-            _context.UserTypes.Remove(userType);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool UserTypeExists(int id)
-        {
-            return _context.UserTypes.Any(e => e.TypeId == id);
+                TypeId = userType.TypeId,
+                Name = userType.Name
+            };
         }
     }
 }

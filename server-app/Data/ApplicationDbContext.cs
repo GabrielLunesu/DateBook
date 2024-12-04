@@ -105,12 +105,6 @@ namespace DatingApp.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Configure array properties
-            modelBuilder.Entity<UserType>()
-                .Property(ut => ut.Permissions)
-                .HasConversion(
-                    v => string.Join(',', v),
-                    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
-
             modelBuilder.Entity<User>()
                 .Property(u => u.Photos)
                 .HasConversion(
@@ -122,6 +116,13 @@ namespace DatingApp.Data
                 .HasConversion(
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
+
+            // Seed initial UserTypes
+            modelBuilder.Entity<UserType>().HasData(
+                new UserType { TypeId = (int)UserType.UserTypeEnum.User, Name = "User" },
+                new UserType { TypeId = (int)UserType.UserTypeEnum.Moderator, Name = "Moderator" },
+                new UserType { TypeId = (int)UserType.UserTypeEnum.Admin, Name = "Admin" }
+            );
         }
     }
 } 
