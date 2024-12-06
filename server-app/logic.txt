@@ -28,3 +28,6 @@ DATING APP MATCH LOGIC SUMMARY
 - Calculate scores real-time
 - Filter before showing users
 - Only compatible users appear in stack
+
+
+before a user sees a profiel on the mhomepage they should see a personal question and if they answer good they see the picture.
