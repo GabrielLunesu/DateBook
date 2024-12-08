@@ -33,3 +33,5 @@ DATING APP MATCH LOGIC SUMMARY
  user can add personal questions to their profile
  these are shown on profile card and on match card
  these are not used for matching, matching is done based on quiz answers
+
+before a user sees a profiel on the mhomepage they should see a personal question and if they answer good they see the picture.
