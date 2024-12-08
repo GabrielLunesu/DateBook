@@ -16,7 +16,7 @@
                    TextColor="White"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
-                   VerticalOptions="Top"/>
+                   VerticalOptions="Center"/>
         </Grid>
 
         <!-- Profile Content -->

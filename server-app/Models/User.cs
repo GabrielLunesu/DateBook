@@ -46,5 +46,8 @@ namespace DatingApp.Models
         public virtual ICollection<Review> Reviews { get; set; }
         
         public virtual ICollection<Chat> Chats { get; set; }
+
+        public List<ProfileQuestion> Questions { get; set; }            // Questions they created
+        public List<ProfileQuestion> AnsweredQuestions { get; set; }    // Questions they answered
     }
 } 

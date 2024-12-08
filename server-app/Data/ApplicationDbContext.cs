@@ -20,6 +20,8 @@ namespace DatingApp.Data
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<ProfileQuestion> ProfileQuestions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -37,6 +39,13 @@ namespace DatingApp.Data
                 .WithOne(p => p.User)
                 .HasForeignKey<Profile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // User - ProfileQuestion (1:Many)
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Questions)
+                .WithOne(pq => pq.User)
+                .HasForeignKey(pq => pq.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // User - Quiz (1:1)
             modelBuilder.Entity<User>()

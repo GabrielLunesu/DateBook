@@ -28,3 +28,8 @@ DATING APP MATCH LOGIC SUMMARY
 - Calculate scores real-time
 - Filter before showing users
 - Only compatible users appear in stack
+
+6. personal questions
+ user can add personal questions to their profile
+ these are shown on profile card and on match card
+ these are not used for matching, matching is done based on quiz answers
