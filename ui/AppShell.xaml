@@ -11,6 +11,7 @@
     xmlns:profile="clr-namespace:ui.Views.Profile"
     xmlns:likes="clr-namespace:ui.Views.Likes"
     xmlns:chat="clr-namespace:ui.Views.Chat"
+    xmlns:chatview="clr-namespace:ui.Views.Chat"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="True">
 
@@ -66,4 +67,9 @@
         ContentTemplate="{DataTemplate chat:ChatPage}"
         Route="ChatPage" />
 
+    <ShellContent
+        ContentTemplate="{DataTemplate chat:ChatPageViewExample}"   
+        Route="ChatPageViewExample" />
+
 </Shell>
+

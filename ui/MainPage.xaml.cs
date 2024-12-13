@@ -1,5 +1,6 @@
 ﻿namespace ui;
 using System.Windows.Input;
+using ui.Views.Chat;
 
 public partial class MainPage : ContentPage
 {
@@ -26,5 +27,7 @@ public partial class MainPage : ContentPage
 	{
 		await Navigation.PopAsync();
 	}
+
+
 }
 

@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using DotNet.Meteor.HotReload.Plugin;
+using ui.Views.Chat;
 
 
-namespace ui;
+namespace ui.ViewModels;
 
 public static class MauiProgram
 {
@@ -21,7 +22,8 @@ public static class MauiProgram
 		.EnableHotReload();
 		builder.Logging.AddDebug();
 #endif
-
+		builder.Services.AddSingleton<ChatPageViewExample>();
+		builder.Services.AddSingleton<ChatPageViewModel>();
 		builder.Services.AddTransient<Views.LoginPage>();
 		builder.Services.AddTransient<Views.RegisterPage>();
 		builder.Services.AddTransient<Views.Quiz.QuizStartPage>();

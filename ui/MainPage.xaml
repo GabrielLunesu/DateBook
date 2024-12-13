@@ -28,6 +28,8 @@
                 Margin="0,40,0,0"
                 Clicked="OnLoginClicked"
                 SemanticProperties.Hint="Takes you to the login page" />
+        
+       
 
         <!-- Registration Text -->
         <VerticalStackLayout Grid.Row="3" 
