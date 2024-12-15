@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using DotNet.Meteor.HotReload.Plugin;
 using ui.Views.Chat;
+using ui.ViewModels;
+using ui.Views;
 
-
-namespace ui.ViewModels;
+namespace ui;
 
 public static class MauiProgram
 {
@@ -31,6 +32,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<Views.Quiz.QuizLookingForPage>();
 		builder.Services.AddTransient<Views.Quiz.QuizSportsImportancePage>();
 		builder.Services.AddTransient<Views.Quiz.QuizWeekendPreferencePage>();
+		builder.Services.AddTransient<RegisterViewModel>();
+		builder.Services.AddTransient<RegisterPage>();
 
 		return builder.Build();
 	}

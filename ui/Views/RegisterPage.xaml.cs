@@ -1,12 +1,14 @@
 namespace ui.Views;
 
 using ui.Views.Quiz;
+using ui.ViewModels;
 
 public partial class RegisterPage : ContentPage
 {
-    public RegisterPage()
+    public RegisterPage(RegisterViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
     }
 
     private async void OnBackClicked(object sender, EventArgs e)

@@ -1,6 +1,9 @@
 ﻿namespace ui;
 using System.Windows.Input;
 using ui.Views.Chat;
+using ui.ViewModels;
+using ui.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 public partial class MainPage : ContentPage
 {
@@ -15,7 +18,7 @@ public partial class MainPage : ContentPage
 
 	private async void OnRegisterClicked()
 	{
-		await Navigation.PushAsync(new Views.RegisterPage());
+		await Navigation.PushAsync(Handler.MauiContext.Services.GetService<RegisterPage>());
 	}
 
 	private async void OnLoginClicked(object sender, EventArgs e)

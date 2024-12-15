@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ui.ViewModels"
              x:Class="ui.Views.RegisterPage"
+             x:DataType="viewmodels:RegisterViewModel"
              BackgroundColor="White">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto" 
@@ -17,41 +19,47 @@
                Margin="0,20,0,40"/>
 
         <!-- Registration Form -->
-        <VerticalStackLayout Grid.Row="2" Spacing="30">
-            <Entry Placeholder="Full Name"
-                   PlaceholderColor="{StaticResource TextSecondary}"
-                   TextColor="{StaticResource TextPrimary}"/>
-            
-            <Picker Title="Geslacht"
-                    TitleColor="{StaticResource TextSecondary}"
-                    TextColor="{StaticResource TextPrimary}">
-                <Picker.Items>
-                    <x:String>Man</x:String>
-                    <x:String>Vrouw</x:String>
-                    <x:String>Anders</x:String>
-                </Picker.Items>
-            </Picker>
-
-            <DatePicker Format="dd/MM/yyyy"
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="30">
+                <Entry Placeholder="Email"
+                       Text="{Binding Email}"
+                       Keyboard="Email"
+                       PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>
-            
-            <Entry Placeholder="Telefoon"
-                   Keyboard="Telephone"
-                   PlaceholderColor="{StaticResource TextSecondary}"
-                   TextColor="{StaticResource TextPrimary}"/>
-            
-            <Entry Placeholder="Wachtwoord"
-                   IsPassword="True"
-                   PlaceholderColor="{StaticResource TextSecondary}"
-                   TextColor="{StaticResource TextPrimary}"/>
-        </VerticalStackLayout>
+                
+                <Entry Placeholder="Username"
+                       Text="{Binding Username}"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
+                
+                <Entry Placeholder="Full Name"
+                       Text="{Binding Name}"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
+
+                <DatePicker Date="{Binding BirthDate}"
+                           Format="dd/MM/yyyy"
+                           TextColor="{StaticResource TextPrimary}"/>
+                
+                <Entry Placeholder="Location"
+                       Text="{Binding Location}"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
+                
+                <Entry Placeholder="Password"
+                       Text="{Binding Password}"
+                       IsPassword="True"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
+            </VerticalStackLayout>
+        </ScrollView>
 
         <!-- Register Button -->
         <Button Grid.Row="3"
                 Text="REGISTREREN"
+                Command="{Binding RegisterCommand}"
                 Style="{StaticResource PrimaryButton}"
-                Margin="0,0,0,30"
-                Clicked="OnRegisterSubmitClicked"/>
+                Margin="0,0,0,30"/>
     </Grid>
 
 </ContentPage> 
