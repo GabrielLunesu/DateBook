@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ui.ViewModels"
              x:Class="ui.Views.Quiz.QuizAgePreferencePage"
+             x:DataType="viewmodels:QuizViewModel"
              BackgroundColor="{StaticResource Primary}">
 
     <Grid RowDefinitions="Auto,*,Auto" 
           Padding="30,20"
           RowSpacing="20">
-
 
         <!-- Title -->
         <Label Grid.Row="0"
@@ -26,6 +27,7 @@
             <VerticalStackLayout Spacing="20">
                 <Entry Placeholder="Ouder dan (18-99)"
                        x:Name="MinAgeEntry"
+                       Text="{Binding MinAgeText, Mode=TwoWay}"
                        Keyboard="Numeric"
                        MaxLength="2"
                        TextColor="{StaticResource TextPrimary}"
@@ -33,6 +35,7 @@
 
                 <Entry Placeholder="Jonger dan (18-99)"
                        x:Name="MaxAgeEntry"
+                       Text="{Binding MaxAgeText, Mode=TwoWay}"
                        Keyboard="Numeric"
                        MaxLength="2"
                        TextColor="{StaticResource TextPrimary}"
@@ -43,9 +46,9 @@
         <!-- Continue Button -->
         <Button Grid.Row="2"
                 Text="DOORGAAN"
+                Command="{Binding SetAgePreferenceCommand}"
                 Style="{StaticResource BaseButton}"
                 BackgroundColor="White"
-                TextColor="{StaticResource Primary}"
-                Clicked="OnContinueClicked"/>
+                TextColor="{StaticResource Primary}"/>
     </Grid>
 </ContentPage> 

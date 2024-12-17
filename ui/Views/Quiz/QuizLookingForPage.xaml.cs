@@ -1,18 +1,14 @@
 namespace ui.Views.Quiz;
+using ui.ViewModels;
 
 public partial class QuizLookingForPage : ContentPage
 {
-    public QuizLookingForPage()
+    private readonly QuizViewModel _viewModel;
+
+    public QuizLookingForPage(QuizViewModel viewModel)
     {
         InitializeComponent();
-    }
-
-    private async void OnOptionSelected(object sender, EventArgs e)
-    {
-        if (sender is Button button)
-        {
-            // Store selection if needed
-            await Navigation.PushAsync(new QuizSportsImportancePage());
-        }
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 } 

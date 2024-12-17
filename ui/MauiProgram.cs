@@ -4,6 +4,7 @@ using ui.Views.Chat;
 using ui.ViewModels;
 using ui.Views;
 using ui.Services;
+using ui.Views.Quiz;
 
 namespace ui;
 
@@ -24,21 +25,31 @@ public static class MauiProgram
 		.EnableHotReload();
 		builder.Logging.AddDebug();
 #endif
-		// transient means that the viewmodel is created for each instance of the view
+
+		// Register HttpClient
+		builder.Services.AddSingleton<HttpClient>();
+
+		// Register Services
+		builder.Services.AddSingleton<IQuizService, QuizService>();
 		builder.Services.AddSingleton<IAuthService, AuthService>();
-		builder.Services.AddSingleton<ChatPageViewExample>();
-		builder.Services.AddSingleton<ChatPageViewModel>();
-		builder.Services.AddTransient<Views.LoginPage>();
-		builder.Services.AddTransient<Views.RegisterPage>();
-		builder.Services.AddTransient<Views.Quiz.QuizStartPage>();
-		builder.Services.AddTransient<Views.Quiz.QuizAgePreferencePage>();
-		builder.Services.AddTransient<Views.Quiz.QuizLookingForPage>();
-		builder.Services.AddTransient<Views.Quiz.QuizSportsImportancePage>();
-		builder.Services.AddTransient<Views.Quiz.QuizWeekendPreferencePage>();
+
+		// Register ViewModels
 		builder.Services.AddTransient<LoginViewModel>();
-		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterViewModel>();
+		builder.Services.AddSingleton<QuizViewModel>();
+		builder.Services.AddTransient<ChatPageViewModel>();
+
+		// Register Pages
+		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterPage>();
+		builder.Services.AddTransient<ChatPageViewExample>();
+		
+		// Register Quiz Pages
+		builder.Services.AddTransient<QuizStartPage>();
+		builder.Services.AddTransient<QuizAgePreferencePage>();
+		builder.Services.AddTransient<QuizLookingForPage>();
+		builder.Services.AddTransient<QuizSportsImportancePage>();
+		builder.Services.AddTransient<QuizWeekendPreferencePage>();
 
 		return builder.Build();
 	}

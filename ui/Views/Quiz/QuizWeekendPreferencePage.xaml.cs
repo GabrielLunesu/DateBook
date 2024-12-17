@@ -1,20 +1,14 @@
 namespace ui.Views.Quiz;
-using ui.Views.Home;
-
+using ui.ViewModels;
 
 public partial class QuizWeekendPreferencePage : ContentPage
 {
-    public QuizWeekendPreferencePage()
+    private readonly QuizViewModel _viewModel;
+
+    public QuizWeekendPreferencePage(QuizViewModel viewModel)
     {
         InitializeComponent();
-    }
-
-    private async void OnOptionSelected(object sender, EventArgs e)
-    {
-        if (sender is Button button)
-        {
-            // For now, just go back to the home page after completing the quiz
-            await Shell.Current.GoToAsync("//HomePage");
-        }
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 }

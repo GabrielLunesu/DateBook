@@ -1,17 +1,14 @@
 namespace ui.Views.Quiz;
+using ui.ViewModels;
 
 public partial class QuizAgePreferencePage : ContentPage
 {
-    public QuizAgePreferencePage()
+    private readonly QuizViewModel _viewModel;
+
+    public QuizAgePreferencePage(QuizViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
-
-    private async void OnContinueClicked(object sender, EventArgs e)
-    {
-        // Change from Navigation.PushAsync to Shell navigation
-        await Shell.Current.GoToAsync("//QuizLookingForPage");
-    }
-
-
 } 

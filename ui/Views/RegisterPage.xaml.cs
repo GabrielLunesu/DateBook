@@ -2,6 +2,7 @@ namespace ui.Views;
 
 using ui.Views.Quiz;
 using ui.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 public partial class RegisterPage : ContentPage
 {
@@ -20,6 +21,13 @@ public partial class RegisterPage : ContentPage
 
     private async void OnRegisterSubmitClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new QuizStartPage());
+        // Get QuizStartPage from DI container
+        var quizStartPage = Handler.MauiContext.Services.GetService<QuizStartPage>();
+        if (quizStartPage == null)
+        {
+            await DisplayAlert("Error", "Could not create quiz page", "OK");
+            return;
+        }
+        await Navigation.PushAsync(quizStartPage);
     }
 } 

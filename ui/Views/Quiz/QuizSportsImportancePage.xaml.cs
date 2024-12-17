@@ -1,18 +1,14 @@
 namespace ui.Views.Quiz;
+using ui.ViewModels;
 
 public partial class QuizSportsImportancePage : ContentPage
 {
-    public QuizSportsImportancePage()
+    private readonly QuizViewModel _viewModel;
+
+    public QuizSportsImportancePage(QuizViewModel viewModel)
     {
         InitializeComponent();
-    }
-
-    private async void OnRatingSelected(object sender, EventArgs e)
-    {
-        if (sender is Button button)
-        {
-            // Store rating if needed
-            await Navigation.PushAsync(new QuizWeekendPreferencePage());
-        }
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 } 
