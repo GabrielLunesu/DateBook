@@ -1,12 +1,17 @@
 namespace ui.Views;
 
 using ui.Views.Quiz;
+using ui.ViewModels;
+
 
 public partial class LoginPage : ContentPage
 {
-    public LoginPage()
+    private readonly LoginViewModel _viewModel;
+    public LoginPage(LoginViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
        
     }
 

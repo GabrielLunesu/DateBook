@@ -18,12 +18,19 @@ public partial class MainPage : ContentPage
 
 	private async void OnRegisterClicked()
 	{
-		await Navigation.PushAsync(Handler.MauiContext.Services.GetService<RegisterPage>());
+		var registerPage = Handler.MauiContext.Services.GetService<RegisterPage>();
+		if (registerPage == null)
+		{
+			await DisplayAlert("Error", "Could not create registration page", "OK");
+			return;
+		}
+		await Navigation.PushAsync(registerPage);
 	}
 
 	private async void OnLoginClicked(object sender, EventArgs e)
 	{
-		await Navigation.PushAsync(new Views.LoginPage());
+		var loginPage=Handler.MauiContext.Services.GetService<LoginViewModel>();
+		await Navigation.PushAsync(new LoginPage(loginPage));
 	}
 
 	private async void OnBackClicked(object sender, EventArgs e)

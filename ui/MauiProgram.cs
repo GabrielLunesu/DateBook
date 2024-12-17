@@ -3,6 +3,7 @@ using DotNet.Meteor.HotReload.Plugin;
 using ui.Views.Chat;
 using ui.ViewModels;
 using ui.Views;
+using ui.Services;
 
 namespace ui;
 
@@ -23,6 +24,8 @@ public static class MauiProgram
 		.EnableHotReload();
 		builder.Logging.AddDebug();
 #endif
+		// transient means that the viewmodel is created for each instance of the view
+		builder.Services.AddSingleton<IAuthService, AuthService>();
 		builder.Services.AddSingleton<ChatPageViewExample>();
 		builder.Services.AddSingleton<ChatPageViewModel>();
 		builder.Services.AddTransient<Views.LoginPage>();
@@ -32,6 +35,8 @@ public static class MauiProgram
 		builder.Services.AddTransient<Views.Quiz.QuizLookingForPage>();
 		builder.Services.AddTransient<Views.Quiz.QuizSportsImportancePage>();
 		builder.Services.AddTransient<Views.Quiz.QuizWeekendPreferencePage>();
+		builder.Services.AddTransient<LoginViewModel>();
+		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterViewModel>();
 		builder.Services.AddTransient<RegisterPage>();
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:ui.ViewModels"
              x:Class="ui.Views.RegisterPage"
+             
              x:DataType="viewmodels:RegisterViewModel"
              BackgroundColor="White">
 
@@ -22,32 +23,32 @@
         <ScrollView Grid.Row="2">
             <VerticalStackLayout Spacing="30">
                 <Entry Placeholder="Email"
-                       Text="{Binding Email}"
+                       Text="{Binding RegisterModel.Email}"
                        Keyboard="Email"
                        PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>
                 
                 <Entry Placeholder="Username"
-                       Text="{Binding Username}"
+                       Text="{Binding RegisterModel.Username}"
                        PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>
                 
                 <Entry Placeholder="Full Name"
-                       Text="{Binding Name}"
+                       Text="{Binding RegisterModel.Name}"
                        PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>
 
-                <DatePicker Date="{Binding BirthDate}"
+                <DatePicker Date="{Binding RegisterModel.BirthDate}"
                            Format="dd/MM/yyyy"
                            TextColor="{StaticResource TextPrimary}"/>
                 
                 <Entry Placeholder="Location"
-                       Text="{Binding Location}"
+                       Text="{Binding RegisterModel.Location}"
                        PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>
                 
                 <Entry Placeholder="Password"
-                       Text="{Binding Password}"
+                       Text="{Binding RegisterModel.Password}"
                        IsPassword="True"
                        PlaceholderColor="{StaticResource TextSecondary}"
                        TextColor="{StaticResource TextPrimary}"/>

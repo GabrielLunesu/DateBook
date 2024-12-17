@@ -5,10 +5,12 @@ using ui.ViewModels;
 
 public partial class RegisterPage : ContentPage
 {
+    private readonly RegisterViewModel _viewModel;
     public RegisterPage(RegisterViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
     }
 
     private async void OnBackClicked(object sender, EventArgs e)

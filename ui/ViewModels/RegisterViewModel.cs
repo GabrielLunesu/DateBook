@@ -1,99 +1,38 @@
 using System.Windows.Input;
 using ui.Models;
 using Microsoft.Maui.Controls;
-
+using CommunityToolkit.Mvvm.ComponentModel;
+using ui.Services;
+using ui.DTOs;
+using CommunityToolkit.Mvvm.Input;
+using ui.Helpers;
 namespace ui.ViewModels
 {
-    public class RegisterViewModel : BindableObject
+    // we have to make a class partial
+    // we have to inherit it from ObservableObject
+    public partial class RegisterViewModel : ObservableObject
     {
-        private string email;
-        private string username;
-        private string password;
-        private string name;
-        private DateTime birthDate = DateTime.Today;
-        private string location;
+       private readonly IAuthService _authService;
 
-        public string Email
-        {
-            get => email;
-            set
+       public RegisterViewModel(IAuthService authService)
+       {
+            _authService = authService;
+            //async relay command is a command that can be executed asynchronously
+            RegisterCommand = new AsyncRelayCommand(Register);
+       }
+
+       [ObservableProperty]
+       private RegisterDTO registerModel = new RegisterDTO();
+
+       public IAsyncRelayCommand RegisterCommand {get; }
+
+       private async Task Register()
+       {
+            var response = await _authService.Register(registerModel);
+            if(response != null)
             {
-                email = value;
-                OnPropertyChanged();
+               await Shell.Current.GoToAsync("//QuizStartPage");
             }
-        }
-
-        public string Username
-        {
-            get => username;
-            set
-            {
-                username = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Password
-        {
-            get => password;
-            set
-            {
-                password = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Name
-        {
-            get => name;
-            set
-            {
-                name = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public DateTime BirthDate
-        {
-            get => birthDate;
-            set
-            {
-                birthDate = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Location
-        {
-            get => location;
-            set
-            {
-                location = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ICommand RegisterCommand { get; }
-
-        public RegisterViewModel()
-        {
-            RegisterCommand = new Command(OnRegisterClicked);
-        }
-
-        private async void OnRegisterClicked()
-        {
-            var registration = new RegistrationModel
-            {
-                Email = Email,
-                Username = Username,
-                Password = Password,
-                Name = Name,
-                BirthDate = BirthDate,
-                Location = Location
-            };
-
-            // TODO: Implement registration logic
-            await Application.Current.MainPage.DisplayAlert("Registration", "Registration will be implemented soon!", "OK");
-        }
+       }
     }
 }

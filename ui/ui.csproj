@@ -24,7 +24,7 @@
 		<ApplicationTitle>ui</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.ui</ApplicationId>
+		<ApplicationId>com.Datebook.ui</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -36,6 +36,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-ios'))">
+		<RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
+		<CodesignKey>-</CodesignKey>
+		<CodesignEntitlements>Platforms/iOS/Entitlements.plist</CodesignEntitlements>
+		<CodesignProvision></CodesignProvision>
+		<CodesignRequireProvisioningProfile>false</CodesignRequireProvisioningProfile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -58,14 +66,13 @@
 
 	<ItemGroup>
 
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 
 		<PackageReference Include="DotNetMeteor.HotReload.Plugin" Version="3.*" />
 
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 	</ItemGroup>
 
 </Project>
