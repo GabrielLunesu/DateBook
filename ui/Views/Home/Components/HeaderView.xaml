@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Home.Components.HeaderView">
+    <Grid ColumnDefinitions="Auto,*,Auto"
+          Padding="20,-10">
+        
+        <Label Grid.Column="1"
+               Text="DateBook"
+               FontSize="25"
+               FontAttributes="Bold"
+               HorizontalOptions="Start"
+               VerticalOptions="Center"/>
+        <Button Grid.Column="2"
+                Text="⚙️"
+                FontSize="20"
+                BackgroundColor="Transparent"
+                Padding="0"
+                HeightRequest="40"
+                WidthRequest="40"
+                Clicked="OnSettingsClicked"/>
+    </Grid>
+</ContentView> 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Home.Components.FilterView"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,Auto,Auto" 
+          Padding="20,10">
+        
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="Auto,*,Auto"
+              Margin="0,20,0,40">
+           
+            <Label Grid.Column="1"
+                   Text="Filter"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+            <Button Grid.Column="2"
+                    Text="✓"
+                    TextColor="{StaticResource Primary}"
+                    FontSize="24"
+                    BackgroundColor="Transparent"
+                    Clicked="OnApplyClicked"
+                    Padding="0"/>
+                   
+        </Grid>
+
+        <!-- Distance Filter -->
+        <VerticalStackLayout Grid.Row="1" 
+                            Spacing="10"
+                            Margin="0,0,0,30">
+            <Label Text="Afstand"
+                   FontSize="18"
+                   FontAttributes="Bold"/>
+            <Frame Padding="15,0"
+                   BorderColor="{StaticResource BorderColor}"
+                   CornerRadius="10">
+                <Picker Title="0 km-10 km"
+                        HeightRequest="50"
+                        TextColor="{StaticResource TextPrimary}"/>
+            </Frame>
+        </VerticalStackLayout>
+
+        <!-- Gender Filter -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10">
+            <Label Text="Geslacht"
+                   FontSize="18"
+                   FontAttributes="Bold"/>
+            <Grid ColumnDefinitions="*,*"
+                  ColumnSpacing="10">
+                <Button Grid.Column="0"
+                        Text="Man"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"
+                        HeightRequest="50"
+                        CornerRadius="25"/>
+                <Button Grid.Column="1"
+                        Text="Vrouw"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource TextPrimary}"
+                        BorderColor="{StaticResource BorderColor}"
+                        BorderWidth="1"
+                        HeightRequest="50"
+                        CornerRadius="25"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage> 

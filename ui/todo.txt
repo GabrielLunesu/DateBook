@@ -1,0 +1,5 @@
+to do: 
+- make the review page
+-match page not done because of the api
+
+install mvvm toolkit community

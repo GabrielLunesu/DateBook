@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Likes.LikesPage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="Auto,*,Auto"
+              Padding="20,10">
+           
+            <Label Grid.Column="1"
+                   Text="Likes"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+        </Grid>
+
+        <!-- Likes Count -->
+        <Label Grid.Row="1"
+               Text="7 Likes"
+               FontSize="20"
+               FontAttributes="Bold"
+               Margin="20,10"/>
+
+        <!-- Likes Grid -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Likes}"
+                        Margin="20,0">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical"
+                                Span="2"
+                                VerticalItemSpacing="10"
+                                HorizontalItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame CornerRadius="10"
+                           Padding="0"
+                           HeightRequest="200"
+                           IsClippedToBounds="True">
+                        <Grid RowDefinitions="*,Auto">
+                            <Image Grid.RowSpan="2"
+                                   Source="{Binding ImageSource}"
+                                   Aspect="AspectFill"/>
+                            <!-- Gradient Overlay -->
+                            <BoxView Grid.Row="1"
+                                    HeightRequest="60"
+                                    VerticalOptions="End">
+                                <BoxView.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="Transparent" Offset="0.0" />
+                                        <GradientStop Color="#80000000" Offset="1.0" />
+                                    </LinearGradientBrush>
+                                </BoxView.Background>
+                            </BoxView>
+                            <!-- User Info -->
+                            <Label Grid.Row="1"
+                                   Text="{Binding Name}"
+                                   TextColor="White"
+                                   FontAttributes="Bold"
+                                   Margin="10,0,0,10"
+                                   VerticalOptions="End"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage> 

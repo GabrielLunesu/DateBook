@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Quiz.QuizStartPage"
+             BackgroundColor="{StaticResource Primary}">
+
+    <Grid RowDefinitions="*,Auto,Auto,Auto,*" 
+          Padding="30,0"
+          RowSpacing="20">
+        
+        <!-- Logo -->
+        <Image Grid.Row="1"
+               Source="datebook.png"
+               HeightRequest="120"
+               WidthRequest="120"
+               HorizontalOptions="Center"/>
+
+        <!-- Title -->
+        <Label Grid.Row="2"
+               Text="KENNISMAKING"
+               FontSize="32"
+               FontAttributes="Bold"
+               TextColor="White"
+               HorizontalOptions="Center"/>
+
+        <!-- Description -->
+        <Label Grid.Row="3"
+               Text="Vul deze quiz in om te matchen bij de mensen die bij jou passen!"
+               FontSize="20"
+               TextColor="White"
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"/>
+
+        <!-- Start Button (invisible but clickable full screen) -->
+        <Button Grid.RowSpan="5"
+                BackgroundColor="Transparent"
+                Clicked="OnStartQuizClicked"/>
+    </Grid>
+
+</ContentPage> 

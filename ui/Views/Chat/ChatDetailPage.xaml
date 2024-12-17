@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:ui.Views.Chat.Converters"
+             x:Class="ui.Views.Chat.ChatDetailPage"
+             BackgroundColor="White">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <converters:BoolToTextColorConverter x:Key="BoolToTextColorConverter"/>
+            <converters:BoolToAlignmentConverter x:Key="BoolToAlignmentConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="Auto,Auto,*"
+              Padding="20,10">
+            
+            <!-- Profile Picture and Name -->
+            <Frame Grid.Column="1"
+                   HeightRequest="40"
+                   WidthRequest="40"
+                   CornerRadius="20"
+                   Padding="0"
+                   IsClippedToBounds="True"
+                   Margin="0,0,10,0">
+                <Image Source="{Binding ImageSource}"
+                       Aspect="AspectFill"/>
+            </Frame>
+            
+            <Label Grid.Column="2"
+                   Text="{Binding Name}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Messages -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Messages}"
+                        Margin="20,0">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="0,5">
+                        <!-- Time Stamp -->
+                        <Label Text="{Binding TimeStamp}"
+                               TextColor="Gray"
+                               FontSize="12"
+                               HorizontalOptions="Center"
+                               Margin="0,10"/>
+                        
+                        <!-- Message Bubble -->
+                        <Frame BackgroundColor="{Binding IsFromMe, Converter={StaticResource BoolToColorConverter}}"
+                               Padding="15,10"
+                               HasShadow="False"
+                               CornerRadius="20"
+                               HorizontalOptions="{Binding IsFromMe, Converter={StaticResource BoolToAlignmentConverter}}">
+                            <Label Text="{Binding Content}"
+                                   TextColor="{Binding IsFromMe, Converter={StaticResource BoolToTextColorConverter}}"
+                                   FontSize="16"/>
+                        </Frame>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Message Input -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,Auto"
+              Padding="20"
+              BackgroundColor="White">
+            <Frame Grid.Column="0"
+                   BackgroundColor="#F0F0F0"
+                   Padding="15,5"
+                   CornerRadius="25"
+                   BorderColor="Transparent">
+                <Entry Placeholder="Type Something...."
+                       Text="{Binding CurrentMessage}"
+                       BackgroundColor="Transparent"
+                       PlaceholderColor="Gray"/>
+            </Frame>
+            <Button Grid.Column="1"
+                    Text="→"
+                    FontSize="24"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    CornerRadius="25"
+                    Padding="0"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White"
+                    Clicked="OnSendClicked"
+                    Margin="10,0,0,0"/>
+        </Grid>
+    </Grid>
+</ContentPage> 

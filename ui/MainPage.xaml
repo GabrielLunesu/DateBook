@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.MainPage"
+             BackgroundColor="{StaticResource Primary}"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto,*" 
+          Padding="30,0"
+          RowSpacing="20">
+        
+      
+        
+        <!-- Logo -->
+        <Image Grid.Row="1"
+               Source="datebook.png"
+               HeightRequest="120"
+               WidthRequest="120"
+               HorizontalOptions="Center"
+               SemanticProperties.Description="Mingle logo" />
+
+        <!-- Login Button -->
+        <Button Grid.Row="2"
+                Text="LOGIN"
+                Style="{StaticResource BaseButton}"
+                BackgroundColor="White"
+                TextColor="{StaticResource Primary}"
+                Margin="0,40,0,0"
+                Clicked="OnLoginClicked"
+                SemanticProperties.Hint="Takes you to the login page" />
+        
+       
+
+        <!-- Registration Text -->
+        <VerticalStackLayout Grid.Row="3" 
+                            Spacing="5"
+                            HorizontalOptions="Center">
+            <Label Text="Nog geen account?"
+                   TextColor="White"
+                   HorizontalOptions="Center" />
+            <Label Text="Registreren"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RegisterCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

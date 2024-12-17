@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.LoginPage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" 
+          Padding="30,0"
+          RowSpacing="20">
+        
+        
+
+        <!-- Title -->
+        <Label Grid.Row="1"
+               Text="INLOGGEN"
+               FontSize="32"
+               FontAttributes="Bold"
+               HorizontalOptions="Start"
+               Margin="0,20,0,40"/>
+
+        <!-- Login Form -->
+        <VerticalStackLayout Grid.Row="2" Spacing="30">
+            <Entry Placeholder="Email"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"/>
+            
+            <Entry Placeholder="Wachtwoord"
+                   IsPassword="True"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   TextColor="{StaticResource TextPrimary}"/>
+        </VerticalStackLayout>
+
+        <!-- Login Button -->
+        <Button Grid.Row="3"
+                Text="DOORGAAN"
+                Style="{StaticResource PrimaryButton}"
+                Margin="0,0,0,30"
+                Clicked="OnLoginSubmitClicked"/>
+    </Grid>
+
+</ContentPage> 

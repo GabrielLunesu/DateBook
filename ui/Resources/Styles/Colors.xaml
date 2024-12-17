@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Brand Colors -->
+    <Color x:Key="Primary">#9747FF</Color>          <!-- Purple for buttons -->
+    <Color x:Key="PrimaryDark">#7A35DB</Color>      <!-- Darker purple for pressed -->
+    <Color x:Key="Secondary">#E9E9E9</Color>        <!-- Light gray for backgrounds -->
+    <Color x:Key="TextPrimary">#000000</Color>      <!-- Black for text -->
+    <Color x:Key="TextSecondary">#666666</Color>    <!-- Gray for secondary text -->
+    <Color x:Key="BorderColor">#DDDDDD</Color>      <!-- Light gray for borders -->
+    <Color x:Key="Background">#FFFFFF</Color>       <!-- White background -->
+    <Color x:Key="Error">#FF3B30</Color>           <!-- Red for errors -->
+</ResourceDictionary>

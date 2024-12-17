@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ui.Views.Chat.ChatPageViewExample"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+        <!-- Header -->
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="Auto,*,Auto"
+              Padding="20,10">
+            <Label Grid.Column="1"
+                   Text="Chat"
+                   FontSize="25"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+        </Grid>
+
+        <!-- Chat List -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Chats}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnChatSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="20,10"
+                          ColumnDefinitions="Auto,*,Auto"
+                          RowDefinitions="Auto,Auto">
+                        
+                        <!-- Profile Picture -->
+                        <Frame Grid.RowSpan="2"
+                               HeightRequest="50"
+                               WidthRequest="50"
+                               CornerRadius="25"
+                               Padding="0"
+                               IsClippedToBounds="True">
+                            <Image Source="{Binding ImageSource}"
+                                   Aspect="AspectFill"/>
+                        </Frame>
+
+                        <!-- Name -->
+                        <Label Grid.Column="1"
+                               Text="{Binding Name}"
+                               FontAttributes="Bold"
+                               FontSize="16"/>
+
+                        <!-- Time -->
+                        <Label Grid.Column="2"
+                               Text="{Binding Time}"
+                               TextColor="Gray"
+                               FontSize="14"/>
+
+                        <!-- Last Message -->
+                        <Label Grid.Column="1"
+                               Grid.Row="1"
+                               Text="{Binding LastMessage}"
+                               TextColor="Gray"
+                               FontSize="14"
+                               LineBreakMode="TailTruncation"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage> 

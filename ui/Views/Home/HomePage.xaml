@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:ui.Views.Home.Components"
+             x:Class="ui.Views.Home.HomePage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto,*,Auto,Auto">
+        <!-- Header -->
+        <components:HeaderView Grid.Row="0" />
+
+        <!-- Profile Card -->
+        <components:ProfileCardView Grid.Row="1" 
+                                  Margin="20"/>
+
+        <!-- Action Buttons -->
+        <components:ActionButtonsView Grid.Row="2"
+                                    Margin="0,0,0,20"/>
+
+        <!-- Navigation Bar -->
+        <components:NavigationBarView Grid.Row="3"/>
+    </Grid>
+</ContentPage> 
