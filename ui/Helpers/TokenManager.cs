@@ -17,9 +17,11 @@ public static class TokenManager
         return await SecureStorage.GetAsync(TokenKey);
     }
 
-    public static async Task SetUserId(string userId)
+    // public static async Task<string> GetUserIdAndToken()
+
+    public static async Task SetUserId(int userId)
     {
-        await SecureStorage.SetAsync(UserIdKey, userId);
+        await SecureStorage.SetAsync(UserIdKey, userId.ToString());
     }
 
     public static async Task<string> GetUserId()

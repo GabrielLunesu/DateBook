@@ -35,6 +35,7 @@ namespace dating_app_server.Controllers
             user.CreatedAt = registerDto.CreatedAt;
             user.UserTypeId = 1;  // Set default type to regular User
             user.Photos = registerDto.Photos;
+            user.Gender = registerDto.Gender;
            var result= await userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
             if (result.Succeeded)
@@ -47,6 +48,7 @@ namespace dating_app_server.Controllers
             response.Name = user.Name;
             response.IsActive = user.IsActive;
             response.CreatedAt = user.CreatedAt;
+            response.UserId = user.Id;
 
             return response;
         }
@@ -76,6 +78,7 @@ namespace dating_app_server.Controllers
                 response.Name = user.Name;
                 response.IsActive = user.IsActive;
                 response.CreatedAt = user.CreatedAt;
+                response.UserId = user.Id;
                 return Ok(response);
 
             }

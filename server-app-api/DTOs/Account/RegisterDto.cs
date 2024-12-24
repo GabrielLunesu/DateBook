@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+using DatingApp.Models.Enums;
 namespace dating_app_server.DTOs.Account
 {
     public class RegisterDto
@@ -14,6 +14,8 @@ namespace dating_app_server.DTOs.Account
         public string Password { get; set; } = string.Empty;
         [Required]
         public string Name { get; set; }
+        [Required]
+        public Gender Gender { get; set; }
 
         public DateTime BirthDate { get; set; } = DateTime.Now.AddDays(-3333);
 

@@ -32,7 +32,7 @@ public class AuthService : IAuthService
                 {
                     var userId = JwtDecoder.GetUserIdFromToken(result.Token);
                     await TokenManager.SetAuthToken(result.Token);
-                    await TokenManager.SetUserId(userId);
+                    await TokenManager.SetUserId(result.UserId);
                     return result.Token;
                 }
             }
@@ -57,9 +57,10 @@ public class AuthService : IAuthService
                 var result = await response.Content.ReadFromJsonAsync<AuthResponseDTO>();
                 if (result?.Token != null)
                 {
-                    var userId = JwtDecoder.GetUserIdFromToken(result.Token);
+                    // var userId = JwtDecoder.GetUserIdFromToken(result.Token);
+                    
                     await TokenManager.SetAuthToken(result.Token);
-                    await TokenManager.SetUserId(userId);
+                    await TokenManager.SetUserId(result.UserId);
                     return result.Token;
                 }
             }
