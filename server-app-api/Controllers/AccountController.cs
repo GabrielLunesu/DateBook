@@ -25,18 +25,20 @@ namespace dating_app_server.Controllers
             {
                 return BadRequest("Username is taken");
             }
-            var user = new AppUser();
-            user.Name = registerDto.Name;
-            user.UserName=registerDto.Username;
-            user.Email = registerDto.Email;
-            user.BirthDate = registerDto.BirthDate;
-            user.Location = registerDto.Location;
-            user.IsActive = registerDto.IsActive;
-            user.CreatedAt = registerDto.CreatedAt;
+            var user = new AppUser
+            {
+                UserName = registerDto.Username.ToLower(),
+                Email = registerDto.Email.ToLower(),
+                Name = registerDto.Name,
+                Gender = registerDto.Gender,
+                BirthDate = registerDto.BirthDate,
+                Photos = registerDto.Photos,
+                Location = registerDto.Location,
+                IsActive = registerDto.IsActive,
+                CreatedAt = registerDto.CreatedAt
+            };
             user.UserTypeId = 1;  // Set default type to regular User
-            user.Photos = registerDto.Photos;
-            user.Gender = registerDto.Gender;
-           var result= await userManager.CreateAsync(user, registerDto.Password);
+            var result= await userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded) return BadRequest(result.Errors);
             if (result.Succeeded)
             {

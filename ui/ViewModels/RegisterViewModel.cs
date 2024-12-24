@@ -19,6 +19,9 @@ namespace ui.ViewModels
        private ObservableCollection<GenderOption> genderOptions;
 
        [ObservableProperty]
+       private GenderOption selectedGenderOption;
+
+       [ObservableProperty]
        private RegisterDTO registerModel = new RegisterDTO();
 
        public IAsyncRelayCommand RegisterCommand {get; }
@@ -35,6 +38,14 @@ namespace ui.ViewModels
                 new GenderOption { Value = Gender.Male, DisplayText = "Man" },
                 new GenderOption { Value = Gender.Female, DisplayText = "Vrouw" }
             };
+       }
+
+       partial void OnSelectedGenderOptionChanged(GenderOption value)
+       {
+           if (value != null)
+           {
+               RegisterModel.Gender = value.Value;
+           }
        }
 
        private async Task Register()

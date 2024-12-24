@@ -19,10 +19,9 @@ public partial class RegisterPage : ContentPage
     public async void OnGenderSelected(object sender, EventArgs e)
     {
         var picker = sender as Picker;
-        if (picker?.SelectedItem != null)
+        if (picker?.SelectedItem is GenderOption selectedOption)
         {
-            var selectedGender = (Gender)picker.SelectedItem;
-            _viewModel.RegisterModel.Gender = selectedGender;
+            _viewModel.SelectedGenderOption = selectedOption;
         }
     }
 

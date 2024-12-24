@@ -44,7 +44,7 @@
 
               <Picker Title="Gender"
                             ItemsSource="{Binding GenderOptions}"
-                            SelectedItem="{Binding RegisterModel.Gender}"
+                            SelectedItem="{Binding SelectedGenderOption}"
                             TitleColor="{StaticResource TextPrimary}"
                             ItemDisplayBinding="{Binding DisplayText}"
                             SelectedIndexChanged="OnGenderSelected"/>

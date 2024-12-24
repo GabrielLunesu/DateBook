@@ -37,6 +37,7 @@ namespace dating_app_server.Controllers
                     Photos = user.Photos,
                     Location = user.Location,
                     IsActive = user.IsActive,
+                    Gender = user.Gender,
                     CreatedAt = user.CreatedAt
                 }).ToListAsync();
         }
@@ -66,6 +67,7 @@ namespace dating_app_server.Controllers
                 Photos = user.Photos,
                 Location = user.Location,
                 IsActive = user.IsActive,
+                Gender = user.Gender,
                 CreatedAt = user.CreatedAt,
                 UserTypeName = user.UserType?.Name,
                 Profile = user.Profile == null ? null : new ProfileDTO
