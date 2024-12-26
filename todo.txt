@@ -1,0 +1,10 @@
+TODO:
+
+start with the dto's:
+- chatDTO 
+- messageDTO 
+- userDTO
+- matchDTO
+- dateDTO
+
+
