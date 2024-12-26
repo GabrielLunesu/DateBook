@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
 using DatingApp.DTOs;
+using DatingApp.Models.Enums;
 
 namespace dating_app_server.Controllers
 {
@@ -38,6 +39,7 @@ namespace dating_app_server.Controllers
                     Location = user.Location,
                     IsActive = user.IsActive,
                     Gender = user.Gender,
+                    GenderName = user.Gender == Gender.Male ? "Male" : "Female",
                     CreatedAt = user.CreatedAt
                 }).ToListAsync();
         }
@@ -83,11 +85,7 @@ namespace dating_app_server.Controllers
                 Quiz = user.Quiz == null ? null : new QuizDTO
                 {
                     QuizId = user.Quiz.QuizId,
-                    AgePreference = user.Quiz.AgePreference,
-                    RelationshipType = user.Quiz.RelationshipType,
-                    SportImportance = user.Quiz.SportImportance,
-                    SocialLevel = user.Quiz.SocialLevel,
-                    WeekendActivity = user.Quiz.WeekendActivity,
+                 
                     CompletedAt = user.Quiz.CompletedAt
                 }
             };

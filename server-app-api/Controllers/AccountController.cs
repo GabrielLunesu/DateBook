@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using DatingApp.Models.Enums;
 
 namespace dating_app_server.Controllers
 {
@@ -48,6 +49,7 @@ namespace dating_app_server.Controllers
             response.Token = await tokenService.CreateToken(user);
             response.Email = user.Email;
             response.Name = user.Name;
+            response.GenderName = user.Gender == Gender.Male ? "Male" : "Female";
             response.IsActive = user.IsActive;
             response.CreatedAt = user.CreatedAt;
             response.UserId = user.Id;

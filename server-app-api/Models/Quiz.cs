@@ -6,24 +6,13 @@ namespace DatingApp.Models
     public class Quiz
     {
         [Key]
-        public int QuizId { get; set; }
+        public int Id { get; set; }
         
-        // Foreign key
-        public int UserId { get; set; }
-        
-        [ForeignKey("UserId")]
-        public virtual AppUser User { get; set; }
-        
-        public string AgePreference { get; set; } // Changed from range type to string
-        
-        public string RelationshipType { get; set; }
-        
-        public int SportImportance { get; set; }
-        
-        public int SocialLevel { get; set; }
-        
-        public string WeekendActivity { get; set; }
-        
-        public DateTime CompletedAt { get; set; }
+        public string Question {get; set;}
+
+        public bool Status {get; set;}
+
+        // Navigation property
+        public virtual ICollection<QuizResponse> QuizResponses { get; set; } = new List<QuizResponse>();
     }
 } 

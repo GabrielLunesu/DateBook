@@ -16,12 +16,16 @@ namespace DatingApp.Data
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Quiz> Quizzes { get; set; }
+
+        public DbSet<Quiz> Quiz {get; set;}
+        public DbSet<QuizResponse> QuizResponses { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<Date> Dates { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
+
+        
 
         public DbSet<ProfileQuestion> ProfileQuestions { get; set; }
 
@@ -64,7 +68,7 @@ namespace DatingApp.Data
             modelBuilder.Entity<AppUser>()
                 .HasOne(u => u.Quiz)
                 .WithOne(q => q.User)
-                .HasForeignKey<Quiz>(q => q.UserId)
+                .HasForeignKey<QuizResponse>(q => q.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // User - Match (1:Many)
