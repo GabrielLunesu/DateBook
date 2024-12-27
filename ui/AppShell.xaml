@@ -32,20 +32,10 @@
         Route="QuizStartPage" />
 
     <ShellContent
-        ContentTemplate="{DataTemplate quiz:QuizAgePreferencePage}"
-        Route="QuizAgePreferencePage" />
+        ContentTemplate="{DataTemplate quiz:QuizQuestionPage}"
+        Route="QuizQuestionPage" />
 
-    <ShellContent
-        ContentTemplate="{DataTemplate quiz:QuizLookingForPage}"
-        Route="QuizLookingForPage" />
-
-    <ShellContent
-        ContentTemplate="{DataTemplate quiz:QuizSportsImportancePage}"
-        Route="QuizSportsImportancePage" />
-
-    <ShellContent
-        ContentTemplate="{DataTemplate quiz:QuizWeekendPreferencePage}"
-        Route="QuizWeekendPreferencePage" />
+  
 
     <ShellContent
         ContentTemplate="{DataTemplate home:HomePage}"
@@ -70,6 +60,11 @@
     <ShellContent
         ContentTemplate="{DataTemplate chat:ChatPageViewExample}"   
         Route="ChatPageViewExample" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate views:LoginErrorPage}"
+        Route="LoginErrorPage" />
+
 
 </Shell>
 

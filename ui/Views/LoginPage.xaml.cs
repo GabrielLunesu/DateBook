@@ -17,11 +17,13 @@ public partial class LoginPage : ContentPage
 
     private async void OnLoginSubmitClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync("//QuizStartPage");
+        await Shell.Current.GoToAsync("//HomePage");
     }
 
     private async void OnBackClicked(object sender, EventArgs e)
     {
         await Navigation.PopAsync();
     }
+
+    
 } 

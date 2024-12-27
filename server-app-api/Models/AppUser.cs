@@ -40,7 +40,10 @@ namespace DatingApp.Models
         
         public virtual Profile Profile { get; set; }
         
-        public virtual QuizResponse Quiz { get; set; }
+       
+
+        public virtual ICollection<QuizResponse> QuizResponses { get; set; }
+
         
         public virtual ICollection<Match> Matches { get; set; }
         

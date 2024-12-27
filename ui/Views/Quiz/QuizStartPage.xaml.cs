@@ -14,6 +14,6 @@ public partial class QuizStartPage : ContentPage
 
     private async void OnStartQuizClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(Handler.MauiContext.Services.GetService<QuizAgePreferencePage>());
+        await Navigation.PushAsync(Handler.MauiContext.Services.GetService<QuizQuestionPage>());
     }
 } 

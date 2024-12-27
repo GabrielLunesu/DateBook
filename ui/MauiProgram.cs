@@ -36,20 +36,23 @@ public static class MauiProgram
 		// Register ViewModels
 		builder.Services.AddTransient<LoginViewModel>();
 		builder.Services.AddTransient<RegisterViewModel>();
-		builder.Services.AddSingleton<QuizViewModel>();
+		builder.Services.AddTransient<QuizViewModel>();
+		builder.Services.AddTransient<QuizQuestionPage>();
 		builder.Services.AddTransient<ChatPageViewModel>();
 
 		// Register Pages
 		builder.Services.AddTransient<LoginPage>();
 		builder.Services.AddTransient<RegisterPage>();
 		builder.Services.AddTransient<ChatPageViewExample>();
+		builder.Services.AddTransient<LoginErrorPage>();
 		
 		// Register Quiz Pages
 		builder.Services.AddTransient<QuizStartPage>();
-		builder.Services.AddTransient<QuizAgePreferencePage>();
-		builder.Services.AddTransient<QuizLookingForPage>();
-		builder.Services.AddTransient<QuizSportsImportancePage>();
-		builder.Services.AddTransient<QuizWeekendPreferencePage>();
+		builder.Services.AddTransient<QuizQuestionPage>();
+		// builder.Services.AddTransient<QuizAgePreferencePage>();
+		// builder.Services.AddTransient<QuizLookingForPage>();
+		// builder.Services.AddTransient<QuizSportsImportancePage>();
+		// builder.Services.AddTransient<QuizWeekendPreferencePage>();
 
 		return builder.Build();
 	}

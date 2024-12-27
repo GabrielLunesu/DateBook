@@ -5,7 +5,7 @@ namespace ui.Helpers;
 public static class TokenManager
 {
     private const string TokenKey = "auth_token";
-    private const string UserIdKey = "user_id";
+    private const string UserIdKey = "userId";
 
     public static async Task SetAuthToken(string token)
     {
@@ -24,9 +24,14 @@ public static class TokenManager
         await SecureStorage.SetAsync(UserIdKey, userId.ToString());
     }
 
-    public static async Task<string> GetUserId()
+    public static async Task<int?> GetUserId()
     {
-        return await SecureStorage.GetAsync(UserIdKey);
+        var userIdStr = await SecureStorage.GetAsync(UserIdKey);
+        if (int.TryParse(userIdStr, out int userId))
+        {
+            return userId;
+        }
+        return null;
     }
 
     public static void ClearAll()

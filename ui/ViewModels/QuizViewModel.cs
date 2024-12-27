@@ -3,157 +3,128 @@ using CommunityToolkit.Mvvm.Input;
 using ui.Services;
 using ui.DTOs;
 using ui.Helpers;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Linq;
 
 namespace ui.ViewModels;
 
-public partial class QuizViewModel : ObservableObject
+public class QuizViewModel : BaseViewModel
 {
     private readonly IQuizService _quizService;
+    private readonly IAuthService _authService;
+    private int _currentIndex = 0;
+    private QuizDTO _currentQuestion;
+    private HashSet<int> _answeredQuestions;
+    
+    public ObservableCollection<QuizDTO> Questions { get; } = new();
+    
+    public IRelayCommand<bool> AnswerCommand { get; }
 
-    [ObservableProperty]
-    private QuizDTO quizData = new();
+    public QuizDTO CurrentQuestion
+    {
+        get => _currentQuestion;
+        set => SetProperty(ref _currentQuestion, value);
+    }
 
-    [ObservableProperty]
-    private string minAgeText;
-
-    [ObservableProperty]
-    private string maxAgeText;
-
-    public IAsyncRelayCommand SubmitQuizCommand { get; }
-
-    public QuizViewModel(IQuizService quizService)
+    public QuizViewModel(IQuizService quizService, IAuthService authService)
     {
         _quizService = quizService;
-        SubmitQuizCommand = new AsyncRelayCommand(SubmitQuiz);
-        InitializeQuizData();
+        _authService = authService;
+        _answeredQuestions = new HashSet<int>();
+        AnswerCommand = new RelayCommand<bool>(async (response) => await HandleAnswerAsync(response));
     }
 
-    [RelayCommand]
-    public async Task SetAgePreference()
+    private async Task HandleAnswerAsync(bool response)
     {
-        System.Diagnostics.Debug.WriteLine($"MinAgeText: {MinAgeText}, MaxAgeText: {MaxAgeText}");
-
-        if (string.IsNullOrEmpty(MinAgeText) || string.IsNullOrEmpty(MaxAgeText))
+        try 
         {
-            await Shell.Current.DisplayAlert("Error", "Please enter both ages", "OK");
-            return;
-        }
+            if (_currentIndex >= Questions.Count) return;
 
-        if (int.TryParse(MinAgeText, out int minAge) && 
-            int.TryParse(MaxAgeText, out int maxAge))
-        {
-            if (minAge <= 0 || maxAge <= 0 || minAge >= maxAge)
+            var currentQuestion = Questions[_currentIndex];
+            var userId = await _authService.GetCurrentUserId();
+
+            var quizResponse = new QuizResponseDTO
             {
-                await Shell.Current.DisplayAlert("Error", "Please enter valid age range", "OK");
+                QuizId = currentQuestion.Id,
+                UserResponse = response,
+                UserId = userId
+            };
+
+            var success = await _quizService.SubmitQuizResponseAsync(quizResponse);
+            if (!success)
+            {
+                await Shell.Current.DisplayAlert("Error", "Failed to submit answer", "OK");
                 return;
             }
 
-            QuizData.AgePreference = $"{minAge},{maxAge}";
-            System.Diagnostics.Debug.WriteLine($"Setting age preference to: {QuizData.AgePreference}");
-            System.Diagnostics.Debug.WriteLine($"Full QuizData after setting age: {System.Text.Json.JsonSerializer.Serialize(QuizData)}");
-            await Shell.Current.GoToAsync("//QuizLookingForPage");
-        }
-        else
-        {
-            await Shell.Current.DisplayAlert("Error", "Please enter valid ages", "OK");
-        }
-    }
+            _currentIndex++;
 
-    [RelayCommand]
-    public async Task SetLookingFor(string preference)
-    {
-        if (!string.IsNullOrEmpty(preference))
-        {
-            QuizData.RelationshipType = preference;
-            System.Diagnostics.Debug.WriteLine($"Full QuizData after setting relationship: {System.Text.Json.JsonSerializer.Serialize(QuizData)}");
-            await Shell.Current.GoToAsync("//QuizSportsImportancePage");
-        }
-    }
-
-    [RelayCommand]
-    public async Task SetSportsImportance(string rating)
-    {
-        if (int.TryParse(rating, out int ratingValue))
-        {
-            QuizData.SportImportance = ratingValue;
-            await Shell.Current.GoToAsync("//QuizWeekendPreferencePage");
-        }
-    }
-
-    [RelayCommand]
-    public async Task SetWeekendPreference(string preference)
-    {
-        if (!string.IsNullOrEmpty(preference))
-        {
-            QuizData.WeekendActivity = preference;
-            await SubmitQuiz();
-        }
-    }
-
-    private async Task SubmitQuiz()
-    {
-        try
-        {
-            System.Diagnostics.Debug.WriteLine($"Starting quiz submission. Full QuizData: {System.Text.Json.JsonSerializer.Serialize(QuizData)}");
-
-            // Validate required fields
-            if (QuizData.UserId == 0)
+            if (_currentIndex >= Questions.Count)
             {
-                await Shell.Current.DisplayAlert("Error", "User not authenticated", "OK");
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(QuizData.AgePreference))
-            {
-                System.Diagnostics.Debug.WriteLine("AgePreference is empty or null!");
-                await Shell.Current.DisplayAlert("Error", "Age preference is required", "OK");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(QuizData.RelationshipType))
-            {
-                await Shell.Current.DisplayAlert("Error", "Relationship type is required", "OK");
-                return;
-            }
-
-            // Set completion time just before submitting
-            QuizData.CompletedAt = DateTime.UtcNow;
-
-            // Debug output
-            System.Diagnostics.Debug.WriteLine($"Submitting Quiz: {System.Text.Json.JsonSerializer.Serialize(QuizData)}");
-
-            var result = await _quizService.SubmitQuiz(QuizData);
-            if (result)
-            {
+                // Quiz completed
+                await Shell.Current.DisplayAlert("Complete", "You have completed the quiz!", "OK");
                 await Shell.Current.GoToAsync("//HomePage");
+                return;
             }
+
+            // Move to next question
+            CurrentQuestion = Questions[_currentIndex];
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Error in SubmitQuiz: {ex}");
             await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
         }
     }
 
-    private async void InitializeQuizData()
+    public async Task LoadQuestionsAsync()
     {
-        var userId = await TokenManager.GetUserId();
-        if (string.IsNullOrEmpty(userId))
+        try
         {
-            await Shell.Current.DisplayAlert("Error", "User not authenticated", "OK");
-            await Shell.Current.GoToAsync("//LoginPage");
-            return;
-        }
+            IsBusy = true;
+            
+            // Get all questions first
+            var allQuestions = await _quizService.GetAllQuestionsAsync();
+            
+            try
+            {
+                // Try to get user's existing responses
+                var answeredQuestions = await _quizService.GetUserResponses();
+                _answeredQuestions = new HashSet<int>(answeredQuestions.Select(r => r.QuizId));
+                
+                // Filter out already answered questions
+                allQuestions = allQuestions.Where(q => !_answeredQuestions.Contains(q.Id)).ToList();
+            }
+            catch
+            {
+                // If getting user responses fails, continue with all questions
+                _answeredQuestions.Clear();
+            }
 
-        if (int.TryParse(userId, out int userIdInt))
-        {
-            QuizData.UserId = userIdInt;
+            Questions.Clear();
+            foreach (var question in allQuestions)
+            {
+                Questions.Add(question);
+            }
+
+            if (Questions.Any())
+            {
+                CurrentQuestion = Questions[0];
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Complete", "You have already completed all questions!", "OK");
+                await Shell.Current.GoToAsync("..");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", "Invalid user ID", "OK");
-            await Shell.Current.GoToAsync("//LoginPage");
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 }

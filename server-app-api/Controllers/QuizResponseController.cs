@@ -92,6 +92,7 @@ namespace dating_app_server.Controllers
         {
             var responses = await _context.QuizResponses
                 .Where(r => r.UserId == userId)
+                .Include(r => r.Quiz)  // Include Quiz details if needed
                 .Select(r => new QuizResponseDTO
                 {
                     Id = r.Id,

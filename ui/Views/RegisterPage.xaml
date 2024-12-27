@@ -11,6 +11,13 @@
           Padding="30,0"
           RowSpacing="20">
      
+        <!-- Back Button -->
+        <Button Grid.Row="0"
+                Text="Terug"
+                HorizontalOptions="Start"
+                Clicked="BackButton_Clicked"
+                Margin="0,20,0,0"/>
+
         <!-- Title -->
         <Label Grid.Row="1"
                Text="REGISTREREN"

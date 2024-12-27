@@ -9,6 +9,8 @@ public class Constants
     public const string LoginEndpoint = $"{BaseApiUrl}/account/login";
     
     // Quiz endpoints
-    public const string QuizzesEndpoint = $"{BaseApiUrl}/Quizzes";
-    public const string QuizByIdEndpoint = $"{BaseApiUrl}/Quizzes/{{id}}";
+    public const string QuizEndpoint = $"{BaseApiUrl}/Quiz";
+    public const string QuizByIdEndpoint = $"{BaseApiUrl}/Quiz/{{id}}";
+    public const string QuizResponseEndpoint = $"{BaseApiUrl}/QuizResponse";
+    public const string UserResponsesEndpoint = $"{BaseApiUrl}/QuizResponse/user/{{0}}";
 }

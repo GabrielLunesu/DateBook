@@ -41,4 +41,9 @@ public partial class RegisterPage : ContentPage
         }
         await Navigation.PushAsync(quizStartPage);
     }
+
+    private async void BackButton_Clicked(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync("//MainPage");
+    }
 }

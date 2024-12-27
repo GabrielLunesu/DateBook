@@ -1,0 +1,43 @@
+<!-- QuizPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:ui.ViewModels"
+             xmlns:dto="clr-namespace:ui.DTOs"
+             x:Class="ui.Views.Quiz.QuizQuestionPage"
+             x:DataType="viewmodels:QuizViewModel">
+    
+    <Grid RowDefinitions="*,Auto">
+        <CarouselView Grid.Row="0"
+                      ItemsSource="{Binding Questions}"
+                      CurrentItem="{Binding CurrentQuestion}"
+                      IsSwipeEnabled="False">
+            <CarouselView.ItemTemplate>
+                <DataTemplate x:DataType="dto:QuizDTO">
+                    <Grid RowDefinitions="*,Auto" 
+                          Padding="20">
+                        <Label Grid.Row="0"
+                               Text="{Binding Question}" 
+                               FontSize="24" 
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+
+        <!-- Move buttons outside of CarouselView -->
+        <Grid Grid.Row="1" 
+              Padding="20">
+            <HorizontalStackLayout HorizontalOptions="Center">
+                <Button Text="Yes" 
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{x:Boolean True}"
+                        Margin="10"/>
+                <Button Text="No"
+                        Command="{Binding AnswerCommand}"
+                        CommandParameter="{x:Boolean False}"
+                        Margin="10"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

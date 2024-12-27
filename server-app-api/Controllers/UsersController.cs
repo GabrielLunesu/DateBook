@@ -51,7 +51,7 @@ namespace dating_app_server.Controllers
             var user = await _context.Users
                 .Include(u => u.UserType)
                 .Include(u => u.Profile)
-                .Include(u => u.Quiz)
+                .Include(u => u.QuizResponses)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
@@ -82,11 +82,11 @@ namespace dating_app_server.Controllers
                     MaxAge = user.Profile.MaxAge,
                     LastActive = user.Profile.LastActive
                 },
-                Quiz = user.Quiz == null ? null : new QuizDTO
+                Quiz = user.QuizResponses == null ? null : new QuizDTO
                 {
-                    QuizId = user.Quiz.QuizId,
+                    // QuizId = user.QuizResponses.,
                  
-                    CompletedAt = user.Quiz.CompletedAt
+                    // CompletedAt = user.QuizResponses.CompletedAt
                 }
             };
         }
