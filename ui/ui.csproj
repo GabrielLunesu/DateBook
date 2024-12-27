@@ -11,10 +11,17 @@
 
 		<!-- iOS Specific Settings -->
 		<CreatePackage>false</CreatePackage>
-		<CodesignKey>iPhone Developer</CodesignKey>
-		<CodesignEntitlements>Platforms/iOS/Entitlements.plist</CodesignEntitlements>
+		<CodesignKey>-</CodesignKey>
+		<CodesignEntitlements></CodesignEntitlements>
+		<CodesignProvision>-</CodesignProvision>
+		<MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+		<MtouchLink>None</MtouchLink>
 		<RuntimeIdentifier>iossimulator-arm64</RuntimeIdentifier>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+
+		<!-- Add Debug configuration specific settings -->
+		<MtouchDebug>true</MtouchDebug>
+		<IOSDebugOverWiFi>true</IOSDebugOverWiFi>
 
 		<!-- Display name -->
 		<ApplicationTitle>DateBook</ApplicationTitle>
