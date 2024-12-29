@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DatingApp.Data;
 using DatingApp.Models;
 using DatingApp.DTOs;
+using DatingApp.Models.Enums;
 
 namespace dating_app_server.Controllers
 {
@@ -37,6 +38,8 @@ namespace dating_app_server.Controllers
                     Photos = user.Photos,
                     Location = user.Location,
                     IsActive = user.IsActive,
+                    Gender = user.Gender,
+                    GenderName = user.Gender == Gender.Male ? "Male" : "Female",
                     CreatedAt = user.CreatedAt
                 }).ToListAsync();
         }
@@ -48,7 +51,7 @@ namespace dating_app_server.Controllers
             var user = await _context.Users
                 .Include(u => u.UserType)
                 .Include(u => u.Profile)
-                .Include(u => u.Quiz)
+                .Include(u => u.QuizResponses)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
@@ -66,6 +69,7 @@ namespace dating_app_server.Controllers
                 Photos = user.Photos,
                 Location = user.Location,
                 IsActive = user.IsActive,
+                Gender = user.Gender,
                 CreatedAt = user.CreatedAt,
                 UserTypeName = user.UserType?.Name,
                 Profile = user.Profile == null ? null : new ProfileDTO
@@ -78,15 +82,11 @@ namespace dating_app_server.Controllers
                     MaxAge = user.Profile.MaxAge,
                     LastActive = user.Profile.LastActive
                 },
-                Quiz = user.Quiz == null ? null : new QuizDTO
+                Quiz = user.QuizResponses == null ? null : new QuizDTO
                 {
-                    QuizId = user.Quiz.QuizId,
-                    AgePreference = user.Quiz.AgePreference,
-                    RelationshipType = user.Quiz.RelationshipType,
-                    SportImportance = user.Quiz.SportImportance,
-                    SocialLevel = user.Quiz.SocialLevel,
-                    WeekendActivity = user.Quiz.WeekendActivity,
-                    CompletedAt = user.Quiz.CompletedAt
+                    // QuizId = user.QuizResponses.,
+                 
+                    // CompletedAt = user.QuizResponses.CompletedAt
                 }
             };
         }

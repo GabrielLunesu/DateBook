@@ -20,22 +20,26 @@
 
         <!-- Login Form -->
         <VerticalStackLayout Grid.Row="2" Spacing="30">
-            <Entry Placeholder="Email"
-                   PlaceholderColor="{StaticResource TextSecondary}"
-                   TextColor="{StaticResource TextPrimary}"/>
-            
-            <Entry Placeholder="Wachtwoord"
-                   IsPassword="True"
-                   PlaceholderColor="{StaticResource TextSecondary}"
-                   TextColor="{StaticResource TextPrimary}"/>
+
+
+        <Entry Placeholder="Email"
+                       Text="{Binding LoginModel.Username}"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
+        <Entry Placeholder="Password"
+                       Text="{Binding LoginModel.Password}"
+                       IsPassword="True"
+                       PlaceholderColor="{StaticResource TextSecondary}"
+                       TextColor="{StaticResource TextPrimary}"/>
         </VerticalStackLayout>
 
         <!-- Login Button -->
         <Button Grid.Row="3"
-                Text="DOORGAAN"
+                Text="LOGIN"
+              Command="{Binding LoginCommand}"
                 Style="{StaticResource PrimaryButton}"
                 Margin="0,0,0,30"
-                Clicked="OnLoginSubmitClicked"/>
+               />      
     </Grid>
 
 </ContentPage> 

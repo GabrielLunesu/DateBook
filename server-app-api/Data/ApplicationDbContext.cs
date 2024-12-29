@@ -16,12 +16,16 @@ namespace DatingApp.Data
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Quiz> Quizzes { get; set; }
+
+        public DbSet<Quiz> Quiz { get; set; }
+        public DbSet<QuizResponse> QuizResponses { get; set; }
         public DbSet<Match> Matches { get; set; }
         public DbSet<Date> Dates { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
+
+
 
         public DbSet<ProfileQuestion> ProfileQuestions { get; set; }
 
@@ -61,11 +65,11 @@ namespace DatingApp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             // User - Quiz (1:1)
-            modelBuilder.Entity<AppUser>()
-                .HasOne(u => u.Quiz)
-                .WithOne(q => q.User)
-                .HasForeignKey<Quiz>(q => q.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // modelBuilder.Entity<AppUser>()
+            //     .HasOne(u => u.Quiz)
+            //     .WithOne(q => q.User)
+            //     .HasForeignKey<QuizResponse>(q => q.UserId)
+            //     .OnDelete(DeleteBehavior.Cascade);
 
             // User - Match (1:Many)
             modelBuilder.Entity<Match>()
@@ -139,6 +143,17 @@ namespace DatingApp.Data
                     v => string.Join(',', v),
                     v => v.Split(',', StringSplitOptions.RemoveEmptyEntries));
 
+            modelBuilder.Entity<QuizResponse>()
+                .HasOne(q => q.User)
+                .WithMany(u => u.QuizResponses)
+                .HasForeignKey(q => q.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<QuizResponse>()
+                .HasOne(q => q.Quiz)
+                .WithMany(qz => qz.QuizResponses) // Assuming a Quiz can have multiple QuizResponses
+                .HasForeignKey(q => q.QuizId);
+
             // Seed initial UserTypes
             modelBuilder.Entity<UserType>().HasData(
                 new UserType { TypeId = (int)UserType.UserTypeEnum.User, Name = "User" },
@@ -147,4 +162,4 @@ namespace DatingApp.Data
             );
         }
     }
-} 
+}

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using ui.Models;
 namespace ui.DTOs
 {
     public class RegisterDTO
@@ -15,6 +15,9 @@ namespace ui.DTOs
     
         public string Name { get; set; }
 
+        public Gender Gender { get; set; }
+
+
         public DateTime BirthDate { get; set; } = DateTime.Now.AddDays(-3333);
 
         public string[] Photos { get; set; } = Array.Empty<string>();
@@ -22,8 +25,8 @@ namespace ui.DTOs
         public string? Location { get; set; } = "NetherLands";
 
         public bool? IsActive { get; set; }=true;
-
         public DateTime? CreatedAt { get; set; }=DateTime.Now;
        
     }
+    
 }

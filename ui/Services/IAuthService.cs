@@ -1,65 +1,101 @@
-using System.Text;
-using System.Text.Json;
+using System.Net.Http.Json;
 using ui.DTOs;
 using ui.Helpers;
+using System.Linq;
+using System.IdentityModel.Tokens.Jwt;
 
-namespace ui.Services
+namespace ui.Services;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
+    Task<string> Login(LoginDTO loginDTO);
+    Task<string> Register(RegisterDTO registerDTO);
+    Task<int> GetCurrentUserId();
+}
 
-        Task<UserDTO> Register(RegisterDTO registerDTO);
-        Task<UserDTO> Login(LoginDTO loginDTO);
+public class AuthService : IAuthService
+{
+    private readonly HttpClient _httpClient;
+
+    public AuthService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
     }
 
-    public class AuthService : IAuthService
+    public async Task<string> Login(LoginDTO loginDTO)
     {
-        private readonly HttpClient _httpClient;
-        // we use the httpclient to send requests to the api
-        // we inject it into the constructor (dependency injection)
-        public AuthService()
+        try
         {
-            _httpClient = new HttpClient();
-        }
-        public async Task<UserDTO> Login(LoginDTO loginDTO)
-        {
-            var json = JsonSerializer.Serialize(loginDTO);
-            // we create a string content object
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsJsonAsync(Constants.LoginEndpoint, loginDTO);
 
-            var response = await _httpClient.PostAsync(Constants.LoginEndpoint, content);
-            
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                var userDTO = JsonSerializer.Deserialize<UserDTO>(responseBody);
-                await TokenManager.SetAuthToken(userDTO.Token);
-                TokenManager.SetUserProperties(userDTO);
-                return userDTO;
+                var result = await response.Content.ReadFromJsonAsync<AuthResponseDTO>();
+                if (result?.Token != null)
+                {
+                    var userId = JwtDecoder.GetUserIdFromToken(result.Token);
+                    await TokenManager.SetAuthToken(result.Token);
+                    await TokenManager.SetUserId(result.UserId);
+                    return result.Token;
+                }
             }
-            throw new Exception($"Failed to login: {responseBody}");          
-        }
 
-        public async Task<UserDTO> Register(RegisterDTO registerDTO)
-        {
-            // we serialize the registerDTO to json
-            var json = JsonSerializer.Serialize(registerDTO);
-            // we create a string content object
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync(Constants.RegisterEndpoint, content);
+            var error = await response.Content.ReadAsStringAsync();
+            // throw new Exception($"Login failed: {error}");
+            Shell.Current.GoToAsync("//LoginErrorPage");
+            return "error login";
             
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            if(response.IsSuccessStatusCode)
-            {
-                var userDTO = JsonSerializer.Deserialize<UserDTO>(responseBody);
-                await TokenManager.SetAuthToken(userDTO.Token);
-                TokenManager.SetUserProperties(userDTO);
-                return userDTO;
-            }
-            throw new Exception($"Failed to register: {responseBody}");            
         }
+        catch (Exception ex)
+        {
+            await Shell.Current.GoToAsync("//LoginErrorPage");
+            return  "error login";
+            // throw new Exception($"Login error: {ex.Message}");
+        }
+    }
+
+    public async Task<string> Register(RegisterDTO registerDTO)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync(Constants.RegisterEndpoint, registerDTO);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<AuthResponseDTO>();
+                if (result?.Token != null)
+                {
+                    // var userId = JwtDecoder.GetUserIdFromToken(result.Token);
+                    
+                    await TokenManager.SetAuthToken(result.Token);
+                    await TokenManager.SetUserId(result.UserId);
+                    return result.Token;
+                }
+            }
+
+            var error = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Registration failed: {error}");
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Registration error: {ex.Message}");
+        }
+    }
+
+    public async Task<int> GetCurrentUserId()
+    {
+        var token = await TokenManager.GetAuthToken();
+        if (string.IsNullOrEmpty(token))
+            throw new Exception("User not authenticated");
+
+        // Decode the JWT token to get the user ID
+        var handler = new JwtSecurityTokenHandler();
+        var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
+        
+        var userIdClaim = jsonToken?.Claims.FirstOrDefault(claim => claim.Type == "nameid");
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            throw new Exception("Could not determine user ID");
+
+        return userId;
     }
 }

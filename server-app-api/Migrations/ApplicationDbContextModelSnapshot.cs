@@ -50,6 +50,9 @@ namespace dating_app_server.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -283,42 +286,51 @@ namespace dating_app_server.Migrations
 
             modelBuilder.Entity("DatingApp.Models.Quiz", b =>
                 {
-                    b.Property<int>("QuizId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QuizId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AgePreference")
+                    b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Quiz");
+                });
+
+            modelBuilder.Entity("DatingApp.Models.QuizResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CompletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RelationshipType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SocialLevel")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SportImportance")
+                    b.Property<int>("QuizId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("WeekendActivity")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("UserResponse")
+                        .HasColumnType("bit");
 
-                    b.HasKey("QuizId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("QuizId");
 
-                    b.ToTable("Quizzes");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("QuizResponses");
                 });
 
             modelBuilder.Entity("DatingApp.Models.Review", b =>
@@ -669,13 +681,21 @@ namespace dating_app_server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DatingApp.Models.Quiz", b =>
+            modelBuilder.Entity("DatingApp.Models.QuizResponse", b =>
                 {
-                    b.HasOne("DatingApp.Models.AppUser", "User")
-                        .WithOne("Quiz")
-                        .HasForeignKey("DatingApp.Models.Quiz", "UserId")
+                    b.HasOne("DatingApp.Models.Quiz", "Quiz")
+                        .WithMany("QuizResponses")
+                        .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DatingApp.Models.AppUser", "User")
+                        .WithMany("QuizResponses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Quiz");
 
                     b.Navigation("User");
                 });
@@ -788,8 +808,7 @@ namespace dating_app_server.Migrations
 
                     b.Navigation("Questions");
 
-                    b.Navigation("Quiz")
-                        .IsRequired();
+                    b.Navigation("QuizResponses");
 
                     b.Navigation("Reviews");
 
@@ -799,6 +818,11 @@ namespace dating_app_server.Migrations
             modelBuilder.Entity("DatingApp.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("DatingApp.Models.Quiz", b =>
+                {
+                    b.Navigation("QuizResponses");
                 });
 
             modelBuilder.Entity("DatingApp.Models.UserType", b =>

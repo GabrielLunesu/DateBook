@@ -2,7 +2,7 @@ using dating_app_server.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using DatingApp.Models.Enums;
 namespace DatingApp.Models
 {
     public class AppUser:IdentityUser<int>
@@ -23,7 +23,8 @@ namespace DatingApp.Models
         public DateTime BirthDate { get; set; }
         
         public string[] Photos { get; set; }
-        
+
+        public Gender Gender { get; set; }
         public string Location { get; set; }
         
         public bool IsActive { get; set; }
@@ -39,7 +40,10 @@ namespace DatingApp.Models
         
         public virtual Profile Profile { get; set; }
         
-        public virtual Quiz Quiz { get; set; }
+       
+
+        public virtual ICollection<QuizResponse> QuizResponses { get; set; }
+
         
         public virtual ICollection<Match> Matches { get; set; }
         
