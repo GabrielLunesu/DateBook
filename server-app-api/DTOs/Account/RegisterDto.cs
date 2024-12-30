@@ -19,7 +19,7 @@ namespace dating_app_server.DTOs.Account
 
         public DateTime BirthDate { get; set; } = DateTime.Now.AddDays(-3333);
 
-        public string[] Photos { get; set; }
+        public ICollection<IFormFile> Photos { get; set; }
 
         public string Location { get; set; } = "NetherLands";
 

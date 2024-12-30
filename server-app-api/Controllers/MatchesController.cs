@@ -9,6 +9,7 @@ using DatingApp.Data;
 using DatingApp.Models;
 using DatingApp.DTOs;
 using System.Reflection.Metadata.Ecma335;
+using DatingApp.Models.Enums;
 
 namespace dating_app_server.Controllers
 {
@@ -164,84 +165,74 @@ namespace dating_app_server.Controllers
         [HttpGet("CalculateMatchingCompatibility/{id}")]
         public async Task<IActionResult> CalculateMatchingCompatibility(int id)
         {
-
-
-            // fetch all quiz responses from users
-            var quizResponses = _context.QuizResponses.ToList();
-
-            // add the quiz answers 
-            PopulateQuizAnswers(quizResponses);
-
-            // we have to filter the responses to the current user
-            var selectedUserResponse = quizResponses.FirstOrDefault(u => u.UserId == id);
-
-            if (selectedUserResponse == null)
+            // Fetching the user's gender
+            var currentUser = await _context.Users.Where(u => u.Id == id).Select(u => new { u.Gender, u.Name }).FirstOrDefaultAsync();
+            if (currentUser == null)
             {
-                return BadRequest("User has not submitted the quiz yet");
+                return BadRequest("Current user not found");
+            }
+            // fetch all users with different gender, excluding the current user
+            var compatibleUsersList = await _context.Users.Where(u => u.Id != id && u.Gender != currentUser.Gender).ToListAsync();
+            if (!compatibleUsersList.Any()) {
+                return Ok("No compatible users found");
+            }
+            // step 1 Fetch the current user's quiz repsone
+            var currentUserResponses = await _context.QuizResponses.Where(qr => qr.UserId == id).Select(qr => new { qr.QuizId, qr.UserResponse }).ToListAsync();
+
+            if (!currentUserResponses.Any()) {
+                return BadRequest("Current user has not submitted any quiz responses");
+
             }
 
-            // exclude the selected user response (eleminate the current user response from the list because that is not matching)
-            var quizResponsesExcludingUser = quizResponses.Where(u => u.UserId != id).ToList();
+            // step 2 Fetch the others user's quiz repsone
+            var compatiableUserIds = compatibleUsersList.Select(u => u.Id).ToList();
+            var otherUserResponses = await _context.QuizResponses.Where(qr => compatiableUserIds.
+            Contains(qr.UserId)).Select(qr => new { qr.UserId, qr.QuizId, qr.UserResponse }).ToListAsync();
 
-            // list of compatible user that fit the criteria of 60% 
-            var compatibleUsers = new List<object>();
-
-            // Iterate the array
-
-            foreach (var response in quizResponsesExcludingUser)
+            //Prepare a list of compatible users
+            var compatiableUsers = new List<object>();
+            // iterate through each compatiable user to calcualte compatibility
+            foreach (var user in compatibleUsersList)
             {
+                //Get all quiz responses for the current compatible user
+                var userResponses = otherUserResponses.Where(qr => qr.UserId == user.Id).ToList();
+                if (!userResponses.Any()) { continue; }
 
-                if (response.QuizAnswers.Count != selectedUserResponse.QuizAnswers.Count)
-                {
-                    continue;
+                // find common questions between both users
+                //user 1 ,1-1,2-1,3-0,4-1,......
+                //user 2 ,1-1,2-1,3-0,4-1.....
+                var commonQuestionIds = currentUserResponses.Select(cr => cr.QuizId).Intersect(userResponses.Select(ur => ur.QuizId)).ToList();
+                if (!commonQuestionIds.Any()) { continue; }
+
+                //count matching answers for common questions
+                int matchingAnswers = 0;
+                foreach (var questionId in commonQuestionIds) {
+
+                    var currentUserAnswer = currentUserResponses.First(cr => cr.QuizId == questionId).UserResponse;
+                    var otherUserAnswer = userResponses.First(cr => cr.QuizId == questionId).UserResponse;
+                    if (currentUserAnswer == otherUserAnswer) { matchingAnswers++; }
+
                 }
-
-
-                int matchingQuestions = CalculateMatchingQuestions(selectedUserResponse, response);
-                int totalQuestions = selectedUserResponse.QuizAnswers.Count;
-
-                // calculate the match percentage
-                double compatibility = (double)matchingQuestions / totalQuestions * 100;
-
-
-                if (compatibility >= 60)
-                {
-                    compatibleUsers.Add(new
+                //Calculate compatibility
+                double compatibility = (double)matchingAnswers / 10 * 100;
+                // Add to compatibility users if compatibility is 60% or higher
+                if (compatibility >= 60) {
+                    compatiableUsers.Add(new
                     {
-                        UserId = response.UserId,
-                        Compatibility = compatibility
+                        UserId = user.Id,
+                        Name = user.Name,
+                        Compatibility = Math.Round(compatibility, 2),
+                        MatchingAnswers = matchingAnswers,
+                        TotalQuestions = 10,
+                        Photos=user.Photos.ToList()
                     });
                 }
+
+               
+
             }
-
-            return Ok(compatibleUsers);
-        }
-
-        // calculate the match percentage
-        // 
-        private int CalculateMatchingQuestions(QuizResponse userResponse1, QuizResponse userResponse2)
-        {
-            int matchingQuestions = 0;
-
-            for (int i = 0; i < userResponse1.QuizAnswers.Count; i++)
-            {
-                if (userResponse1.QuizAnswers[i] == userResponse2.QuizAnswers[i])
-                {
-                    matchingQuestions++;
-                }
-            }
-
-            return matchingQuestions;
-        }
-
-        // get responses and add all the responses to a list
-        private void PopulateQuizAnswers(List<QuizResponse> quizResponses)
-        {
-            foreach (var response in quizResponses)
-            {
-
-                response.QuizAnswers.Add(response.UserResponse);
-            }
-        }
-    }
+            return Ok(compatiableUsers);
+        } 
+    } 
 }
+

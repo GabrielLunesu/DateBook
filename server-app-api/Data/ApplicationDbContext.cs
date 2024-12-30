@@ -3,6 +3,7 @@ using DatingApp.Models;
 using dating_app_server.Models;
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace DatingApp.Data
 {
@@ -37,6 +38,21 @@ namespace DatingApp.Data
           .WithOne(u => u.User)
           .HasForeignKey(ur => ur.UserId)
           .IsRequired();
+
+            modelBuilder.Entity<AppUser>()
+    .Property(u => u.Photos)
+    .HasConversion(
+        v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
+        v => JsonSerializer.Deserialize<string[]>(v, (JsonSerializerOptions)null)
+    );
+
+        //    modelBuilder.Entity<AppUser>()
+        //.Property(u => u.Photos)
+        //.HasConversion(
+        //    v => string.Join(",", v),          // Convert array to string for saving
+        //    v => v.Split(',', StringSplitOptions.RemoveEmptyEntries) // Convert string back to array
+        //);
+
 
             modelBuilder.Entity<AppRole>()
                 .HasMany(ur => ur.UserRoles)

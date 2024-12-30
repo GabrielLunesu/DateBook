@@ -16,9 +16,10 @@ namespace DatingApp.DTOs
         public string GenderName { get; set; }
         public string Name { get; set; }
         public DateTime BirthDate { get; set; }
-        public string[] Photos { get; set; }
+        public List<string> Photos { get; set; }
         public string Location { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedAt { get; set; }
+        
     }
 }
