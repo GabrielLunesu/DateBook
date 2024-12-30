@@ -49,6 +49,24 @@
                            Format="dd/MM/yyyy"
                            TextColor="{StaticResource TextPrimary}"/>
 
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Profile Photo" 
+                           FontSize="16"
+                           TextColor="{StaticResource TextPrimary}"/>
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Image x:Name="ProfileImage"
+                               Source="{Binding SelectedImageSource}"
+                               HeightRequest="100"
+                               WidthRequest="100"
+                               Aspect="AspectFill"/>
+                        <Button Grid.Column="1"
+                                Text="Upload Photo"
+                                Command="{Binding UploadPhotoCommand}"
+                                VerticalOptions="Center"
+                                Margin="10,0,0,0"/>
+                    </Grid>
+                </VerticalStackLayout>
+
               <Picker Title="Gender"
                             ItemsSource="{Binding GenderOptions}"
                             SelectedItem="{Binding SelectedGenderOption}"
