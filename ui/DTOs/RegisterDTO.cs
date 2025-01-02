@@ -18,9 +18,10 @@ namespace ui.DTOs
         public Gender Gender { get; set; }
 
 
+
         public DateTime BirthDate { get; set; } = DateTime.Now.AddDays(-3333);
 
-        public string[] Photos { get; set; } = Array.Empty<string>();
+        public string[] Photos { get; set; } 
 
         public string? Location { get; set; } = "NetherLands";
 
