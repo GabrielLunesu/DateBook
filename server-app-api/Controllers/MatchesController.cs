@@ -165,17 +165,26 @@ namespace dating_app_server.Controllers
         [HttpGet("CalculateMatchingCompatibility/{id}")]
         public async Task<IActionResult> CalculateMatchingCompatibility(int id)
         {
-            // Fetching the user's gender
-            var currentUser = await _context.Users.Where(u => u.Id == id).Select(u => new { u.Gender, u.Name }).FirstOrDefaultAsync();
+            // Fetching the user's gender and additional info
+            var currentUser = await _context.Users
+                .Where(u => u.Id == id)
+                .Select(u => new { u.Gender, u.Name, u.BirthDate, u.Location })
+                .FirstOrDefaultAsync();
+        
             if (currentUser == null)
             {
                 return BadRequest("Current user not found");
             }
+
             // fetch all users with different gender, excluding the current user
-            var compatibleUsersList = await _context.Users.Where(u => u.Id != id && u.Gender != currentUser.Gender).ToListAsync();
+            var compatibleUsersList = await _context.Users
+                .Where(u => u.Id != id && u.Gender != currentUser.Gender)
+                .ToListAsync();
+
             if (!compatibleUsersList.Any()) {
                 return Ok("No compatible users found");
             }
+
             // step 1 Fetch the current user's quiz repsone
             var currentUserResponses = await _context.QuizResponses.Where(qr => qr.UserId == id).Select(qr => new { qr.QuizId, qr.UserResponse }).ToListAsync();
 
@@ -217,14 +226,21 @@ namespace dating_app_server.Controllers
                 double compatibility = (double)matchingAnswers / 10 * 100;
                 // Add to compatibility users if compatibility is 60% or higher
                 if (compatibility >= 60) {
+                    // Calculate age from birthdate
+                    var age = DateTime.Today.Year - user.BirthDate.Year;
+                    // Adjust age if birthday hasn't occurred this year
+                    if (user.BirthDate.Date > DateTime.Today.AddYears(-age)) age--;
+
                     compatiableUsers.Add(new
                     {
                         UserId = user.Id,
                         Name = user.Name,
+                        Age = age,
+                        Location = user.Location,
                         Compatibility = Math.Round(compatibility, 2),
                         MatchingAnswers = matchingAnswers,
                         TotalQuestions = 10,
-                        Photos=user.Photos.ToList()
+                        Photos = user.Photos.ToList()
                     });
                 }
 

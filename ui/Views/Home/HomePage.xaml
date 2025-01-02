@@ -2,20 +2,71 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:ui.Views.Home.Components"
+             xmlns:converters="clr-namespace:ui.Converters"
              x:Class="ui.Views.Home.HomePage"
              BackgroundColor="White">
+
+    <ContentPage.Resources>
+        <converters:NotNullConverter x:Key="NotNullConverter"/>
+    </ContentPage.Resources>
 
     <Grid RowDefinitions="Auto,*,Auto,Auto">
         <!-- Header -->
         <components:HeaderView Grid.Row="0" />
 
         <!-- Profile Card -->
-        <components:ProfileCardView Grid.Row="1" 
-                                  Margin="20"/>
+        <Border Grid.Row="1" 
+                Margin="20"
+                StrokeShape="RoundRectangle 20">
+            <Grid RowDefinitions="2*,Auto,Auto" 
+                  IsVisible="{Binding CurrentMatch, Converter={StaticResource NotNullConverter}}">
+                
+                <!-- Profile Image -->
+                <Image Grid.Row="0"
+                       Aspect="AspectFill"
+                       Source="{Binding CurrentMatch.MainPhotoUrl}"
+                       HeightRequest="300"/>
 
-        <!-- Action Buttons -->
-        <components:ActionButtonsView Grid.Row="2"
-                                    Margin="0,0,0,20"/>
+                <!-- Profile Info -->
+                <VerticalStackLayout Grid.Row="1" 
+                                   Padding="15">
+                    <Label Text="{Binding CurrentMatch.Name}"
+                           FontSize="24"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding CurrentMatch.Age, StringFormat='{0} jaar oud'}"
+                           FontSize="18"
+                           Margin="0,2,0,0"/>
+                    <Label Text="{Binding CurrentMatch.Location}"
+                           FontSize="18"
+                           Margin="0,2,0,0"/>
+                    <!-- <Label Text="{Binding CurrentMatch.Compatibility, StringFormat='Compatibility: {0}%'}"
+                           FontSize="18"
+                           Margin="0,10,0,0"/> -->
+                    <Label Text="{Binding CurrentMatch.MatchingAnswers, StringFormat='Gelijke antwoorden: {0}'}"
+                           FontSize="16"/>
+                </VerticalStackLayout>
+
+                <!-- Action Buttons -->
+                <HorizontalStackLayout Grid.Row="2"
+                                     HorizontalOptions="Center"
+                                     Spacing="20"
+                                     Margin="0,0,0,15">
+                    <Button Text="✕"
+                            Command="{Binding SwipeLeftCommand}"
+                            BackgroundColor="Red"
+                            WidthRequest="60"
+                            HeightRequest="60"
+                            CornerRadius="30"/>
+                    
+                    <Button Text="♥"
+                            Command="{Binding SwipeRightCommand}"
+                            BackgroundColor="Green"
+                            WidthRequest="60"
+                            HeightRequest="60"
+                            CornerRadius="30"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
 
         <!-- Navigation Bar -->
         <components:NavigationBarView Grid.Row="3"/>

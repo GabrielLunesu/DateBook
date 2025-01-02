@@ -13,4 +13,10 @@ public class Constants
     public const string QuizByIdEndpoint = $"{BaseApiUrl}/Quiz/{{id}}";
     public const string QuizResponseEndpoint = $"{BaseApiUrl}/QuizResponse";
     public const string UserResponsesEndpoint = $"{BaseApiUrl}/QuizResponse/user/{{0}}";
+    
+    // Matches endpoints
+    public const string CalculateMatchingEndpoint = $"{BaseApiUrl}/Matches/CalculateMatchingCompatibility/{{0}}";
+    
+    // Images endpoint
+    public const string ImagesBaseUrl = $"{BaseApiUrl}/images";  // Adjust this path according to your API structure
 }

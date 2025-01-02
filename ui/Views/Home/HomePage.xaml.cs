@@ -1,24 +1,21 @@
+using ui.ViewModels;
+
 namespace ui.Views.Home;
 
 public partial class HomePage : ContentPage
 {
-    public HomePage()
+    private readonly HomeViewModel _viewModel;
+
+    public HomePage(HomeViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        BindingContext = viewModel;
     }
 
-    private void OnSettingsClicked(object sender, EventArgs e)
+    protected override async void OnAppearing()
     {
-        // Navigate to settings page
-    }
-
-    private void OnLikeClicked(object sender, EventArgs e)
-    {
-        // Handle like action
-    }
-
-    private void OnDislikeClicked(object sender, EventArgs e)
-    {
-        // Handle dislike action
+        base.OnAppearing();
+        await _viewModel.LoadMatches();
     }
 } 
