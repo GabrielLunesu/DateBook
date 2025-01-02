@@ -9,7 +9,7 @@ namespace ui.Services;
 public interface IAuthService
 {
     Task<string> Login(LoginDTO loginDTO);
-    Task<string> Register(RegisterDTO registerDTO);
+    Task<string> Register(MultipartFormDataContent content);
     Task<int> GetCurrentUserId();
 }
 
@@ -54,19 +54,17 @@ public class AuthService : IAuthService
         }
     }
 
-    public async Task<string> Register(RegisterDTO registerDTO)
+    public async Task<string> Register(MultipartFormDataContent content)
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(Constants.RegisterEndpoint, registerDTO);
+            var response = await _httpClient.PostAsync(Constants.RegisterEndpoint, content);
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<AuthResponseDTO>();
                 if (result?.Token != null)
                 {
-                    // var userId = JwtDecoder.GetUserIdFromToken(result.Token);
-                    
                     await TokenManager.SetAuthToken(result.Token);
                     await TokenManager.SetUserId(result.UserId);
                     return result.Token;
@@ -78,7 +76,7 @@ public class AuthService : IAuthService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Registration error: {ex.Message}");
+            throw new Exception($"Registration error: {ex.Message}", ex);
         }
     }
 
